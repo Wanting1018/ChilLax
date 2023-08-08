@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "宗旨";
+}
+
+<style>
+    body {
+        background: #21292D;
+    }
+
+    p {
+        font-size: 1.7rem;
+    }
+
+    .type {
+        font-size: 1.7rem;
+        font-family: monospace;
+        color: #0000;
+        background: linear-gradient(-90deg,#F0FFFF 5px,#0000 0) 10px 0, linear-gradient(#F0FFFF 0 0) 0 0;
+        background-size: calc(var(--n)*1ch) 200%;
+        -webkit-background-clip: padding-box,text;
+        background-clip: padding-box,text;
+        background-repeat: no-repeat;
+        animation: b .5s infinite steps(1), t calc(var(--n)*.1s) steps(var(--n)) forwards;
+    }
+
+    @@keyframes t {
+        from {
+            background-size: 0 200%
+        }
+    }
+
+    @@keyframes b {
+        50% {
+            background-position: 0 -100%,0 0
+        }
+    }
+</style>
+
+<div id="app">
+    <section class="home-section bg bg-gradient" style="margin-top: -50px;" id="home;">
+        <div class="titan-caption">
+            <div class="caption-content">
+                <div class="font-alt mb-30 titan-title-size-1">Hello &amp; welcome</div>
+                <div class="font-alt mb-40 titan-title-size-4">We are ChilLax</div>
+            </div>
+        </div>
+    </section>
+    <div class="container" style="margin-top: 50px">
+        <span class="type" style="--n:1000">
+            歡迎來到我們的網站，這是一個致力於提供專注頁面、AI 占卜和療癒商城服務的平台。我們的宗旨是幫助人們在忙碌、壓力和煩憂的生活中找到平衡、充滿正面能量和心靈療癒的方式。
+            在這個充滿資訊和娛樂的數位時代，專注頁面是我們致力推廣的一個重要理念。我們深知現代生活中的分心和多工，讓人們難以保持集中和專注。因此，我們提供了仿真的情境畫面與音效，幫助人們建立起高度專注的生活和工作習慣。透過專注，我們相信每個人都能夠更有效率地達成目標，並享受更豐富的人生。
+            此外，我們的網站還提供 AI 占卜服務，這是一種結合科技與靈性的全新體驗。我們的 AI 占卜系統運用了先進的人工智能技術，能夠提供準確且啟發性的占卜結果。這些占卜結果能夠幫助人們瞭解自己的潛能、挑戰和機遇，並為他們的人生方向提供指引。我們希望透過 AI 占卜，人們能夠更深入地探索自我，找到內在平衡和智慧的指引。
+            最後，我們的療癒商城是一個提供心靈療癒產品和資源的平台。在這個商城中，您可以找到各種能夠提升內在平靜、身心健康和心靈成長的產品。我們精心挑選了優質的香氛精油、解壓玩偶、擺飾家具等等，以滿足您對心靈療癒的需求。我們相信每個人都應該給予自己一個呵護心靈的空間。
+            讓我們一起開啟充滿專注、智慧和療癒的生活之旅吧！
+        </span>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const message = ref("Hello Vue!")
+
+                return {
+                    message
+                }
+            }
+        }).mount('#app')
+    </script>
+    }

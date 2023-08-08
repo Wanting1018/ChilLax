@@ -1,0 +1,308 @@
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+@{
+    Layout = null;
+}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "poppins",sans-serif;
+    }
+
+    .background {
+        /* 最下層背景 */
+        background: url(../images/login.jpg) no-repeat;
+        /* background-color: #98979783; */
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+        filter: blur(2px);
+    }
+
+    .main {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        width: 75%;
+        height: 700px;
+        background: url(../images/login.jpg) no-repeat;
+        background-position: center;
+        background-size: cover;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+
+        /*中間白色透明背景*/
+        .main .profile-section {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%,0);
+            width: 500px;
+            height: 100%;
+            color: #fff;
+            background-color: rgba(88, 85, 85, 0.2);
+            /* backdrop-filter: blur(4px); */
+        }
+
+    .profile-section .form-box {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+        .profile-section .form-box h2 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+    .form-box .form-group {
+        width: 400px;
+        height: 50px;
+        border-bottom: 2px solid#fff;
+        margin: 30px 0;
+        position: relative;
+    }
+
+    .form-group .user_input {
+        height: 100%;
+        color: #fff;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-40%);
+        width: 350px;
+        padding-left: 10px;
+        text-transform: none;
+    }
+
+
+    .form-group .memberBirth {
+        height: 65%;
+        /* padding: 10px; */
+        border: 1px solid lightgray;
+        outline: none;
+        font-size: 16px;
+        position: absolute;
+        transform: translateY(30%);
+        margin-left: 120px;
+        background: rgba(0,0,0,0.4);
+        text-align: center;
+        color: white;
+        border-radius: 6px;
+        width: 150px;
+    }
+
+    .form-group .form-select {
+        height: 65%;
+        color: white;
+        text-align: center;
+        background: rgba(0,0,0,0.4);
+        /* background: #ffffff5f; */
+        /* outline: none; */
+        padding: 5px;
+        border: 1px solid lightgray;
+        font-size: 16px;
+        padding-right: 20px;
+        margin-left: 120px;
+        border-radius: 6px;
+        width: 150px;
+    }
+
+    .form-group label {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-30%);
+        font-size: 16px;
+        pointer-events: none;
+        transition: .5s ease;
+    }
+
+    .form-group i {
+        font-size: 19px;
+        color: white;
+        margin-right: 5px;
+    }
+    /*文字向上漂浮*/
+    .form-group input:focus ~ label,
+    .form-group input:valid ~ label {
+        top: -5px;
+    }
+
+    .form-group select:focus ~ label,
+    .form-group select:valid ~ label {
+        top: -5px;
+    }
+
+    .form-group .fixLabel{
+        top: -5px;
+    }
+
+    .btn {
+        width: 100%;
+        height: 45px;
+        outline: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: #4F9D9D;
+        font-size: 16px;
+        color: #fff;
+        box-shadow: rgba(0,0,0,0.4);
+        font-weight: bolder;
+    }
+
+        .btn:hover {
+            background: transparent;
+            border: 1px solid #4f9d9d;
+            border-radius: 2px;
+            color: #4f9d9d;
+        }
+
+    .validation-error-message {
+        color: red;
+        font-size: 14px;
+        margin-left: 80px;
+        /*margin-left: 290px;*/
+    }
+
+</style>
+
+@using System.ComponentModel.DataAnnotations
+@model ChilLaxFrontEnd.ViewModels.registerViewModel
+
+<!-- LOGIN FORM CREATION -->
+<title>填寫基本資料</title>
+<div class="background"></div>
+<article>
+    <div class="main container">
+        <div class="row profile-section">
+            <div class="form-box login col-md-12">
+                <form id="externalLogin">
+                    @Html.AntiForgeryToken()
+                    <h2>填寫基本資料</h2>
+                    <div class="form-group">
+                        <div class="inner-input">
+                            <input type="text" id="memberName" name="memberName" class="user_input" autocomplete="off" value="@Model.memberName" required readonly />
+                            <label class="fixLabel"><i class="fas fa-user"></i>姓名</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="inner-input">
+                            <input type="tel" id="memberTel" name="memberTel" class="user_input" autocomplete="off" required />
+                            <label><i class="fa-solid fa-phone"></i>手機號碼</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="inner-input">
+                            <input type="email" id="memberEmail" name="memberEmail" class="user_input" autocomplete="off" value="@Model.memberEmail" required readonly />
+                            <label class="fixLabel"><i class="fa-solid fa-envelope"></i>信箱</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="inner-input">
+                            <input type="date" id="memberBirthday" name="memberBirthday" class="memberBirth" autocomplete="off" min="1950-01-01" max="2023-08-08" required />
+                            <label><i class="fa-solid fa-cake-candles"></i>生日</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="inner-input">
+                            <select id="memberSex" class="form-select user_input" name="memberSex">
+                                <option value="">-- 請選擇 --</option>
+                                <option value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
+                            <label><i class="fa-solid fa-children"></i>性別(選填)</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="inner-input">
+                            <input type="text" id="memberAddress" name="memberAddress" class="user_input" autocomplete="off" />
+                            <label class="labelMove"><i class="fa-solid fa-map-location-dot"></i>通訊地址(選填)</label>
+                        </div>
+                    </div>
+                    <button class="btn">註冊</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</article>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    //Register 表單傳送到後端
+    document.getElementById("externalLogin").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let memberName = document.getElementById("memberName").value;
+        let memberTel = document.getElementById("memberTel").value;
+        let memberEmail = document.getElementById("memberEmail").value;
+        let memberBirthday = document.getElementById("memberBirthday").value;
+        let memberSex = document.getElementById("memberSex").value;
+        let memberAddress = document.getElementById("memberAddress").value;
+
+        if (!memberName || !memberTel || !memberEmail || !memberBirthday) {
+            alert('請輸入必填欄位!');
+            return false;
+        }
+
+        let isMale = "";
+
+        if (memberSex == "0") {
+            isMale = false;
+        } else if (memberSex == "1") {
+            isMale = true;
+        } else {
+            isMale = "";
+        }
+
+
+        const formData =
+        {
+            memberId: 0,
+            memberName: memberName,
+            memberTel: memberTel,
+            memberEmail: memberEmail,
+            memberBirthday: memberBirthday,
+            memberSex: isMale,
+            memberAddress: memberAddress
+        }
+
+        console.log(JSON.stringify(formData));
+
+        $.ajax({
+            type: "POST",
+            url: "/api/Members/ProcessGoogleLogin",
+            data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8 "
+        }).done(data => {
+            //alert(data);
+            if (!data.success) {
+                alert(data.message);
+                return false;
+            }
+            window.location.href = "https://localhost:5000/Home/Index";
+
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            if (jqXHR.status === 400) {
+                const errorResponse = jqXHR.responseJSON;
+                alert(errorResponse.message);
+            } else {
+                console.error("AJAX error:", textStatus, errorThrown);
+            }
+        });
+        return false;
+    });
+
+</script>

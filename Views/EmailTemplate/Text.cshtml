@@ -1,0 +1,65 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>驗證帳號</title>
+</head>
+<body>
+    <h1>歡迎您，@ViewBag.UserName</h1>
+    <p>感謝您註冊成為我們的會員。</p>
+    <p>請點擊以下連結來驗證您的帳號：</p>
+    <a id="verificationLink">點擊這裡</a>
+    <p style="display:none;" id="regID">@ViewBag.regID</p>
+
+</body>
+</html>
+<script>
+    document.getElementById("verificationLink").addEventListener("click", verifyEmail);
+
+    async function verifyEmail() {
+        let regID = document.getElementById("regID").innerText;
+        console.log(regID);
+
+        try {
+            const response = await fetch(`/api/members/Verify/${regID}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            });
+
+            const data = await response.json();
+            alert(data.message);
+            window.closePage(data.closePageUrl); // 呼叫自訂函式關閉特定頁面
+            window.location.href = "https://localhost:5000/Login/Login";
+        } catch (error) {
+            alert("ajax呼叫失敗：" + error);
+            console.log(error);
+        }
+    }
+
+    function closePage(pageUrl) {
+        window.open(pageUrl, "_self").close();
+    }
+
+        //function verifyEmail() {
+        //    console.log("verifyEmail");
+        //    let regID = document.getElementById("regID").innerText;
+        //    console.log(regID);
+
+        //    $.ajax({
+        //        type: "PUT",
+        //        url: `/api/members/Verify/${regID}`,
+        //        contentType: "application/json"
+        //    }).done(data => {
+        //        alert(data.message);
+        //        window.location.href = "https://localhost:5000/Login/Login";
+        //    }).fail(err => {
+        //        alert("ajax呼叫失敗：" + err.responseText);
+        //        console.log(err.responseText);
+        //    });
+        //}
+</script>
+
+

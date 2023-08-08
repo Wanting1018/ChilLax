@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "團隊成員";
+}
+
+@section Styles
+    {
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: radial-gradient(#281c3e,#0f051d);
+            caret-color: transparent;
+        }
+
+        .team {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .team-content {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, auto));
+            align-items: center;
+            gap: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+            .team-content img {
+                width: 100%;
+                height: auto;
+                border-radius: 15px;
+                margin-bottom: 15px;
+            }
+
+        .center h1 {
+            color: #fff;
+            font-size: 4rem;
+            text-align: center;
+        }
+
+        .box {
+            padding: 16px;
+            background: #1b1229;
+            border-radius: 15px;
+            transition: all .38s ease;
+        }
+
+            .box h3 {
+                font-size: 23px;
+                font-weight: 600;
+                color: #fff;
+                margin-bottom: 8px;
+            }
+
+            .box h5 {
+                font-size: 15px;
+                font-weight: 600;
+                color: #b7b4bb;
+                margin-bottom: 15px;
+                letter-spacing: 2px;
+            }
+
+
+        .box:hover {
+            transform: translateY(-10px);
+            cursor: pointer;
+        }
+
+        @@media(max-width: 1240px) {
+            .team {
+                width: 100%;
+                height: auto;
+                padding: 90px 2%;
+            }
+
+            .center h1 {
+                font-size: 3.2rem;
+            }
+        }
+    </style>
+}
+<section class="home-section" id="home" style="margin-top: -50px; background: #281c3e">
+    <div class="titan-caption">
+        <div class="caption-content" style="color: white">
+            <div class="font-alt mb-30 titan-title-size-1">Ispan 133 Team 3</div>
+            <div class="font-alt mb-40 titan-title-size-4">
+                <span class="rotate">Communication | Collaboration | Problem Solving</span>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container-fluid">
+    <section class="team">
+        <div class="center">
+            <h1>Our Team</h1>
+        </div>
+        <div class="team-content">
+            <div class="box">
+                <img src="~/assets/images/ting.png" />
+                <h3>SHIH,WAN-TING</h3>
+                <h5>商品系統</h5>
+            </div>
+
+            <div class="box">
+                <img src="~/assets/images/jing.png" />
+                <h3>JIN,WAN-JING</h3>
+                <h5>會員系統</h5>
+            </div>
+
+            <div class="box">
+                <img src="~/assets/images/yen.png" />
+                <h3>HUANG,GUO-YAN</h3>
+                <h5>占卜系統 & 客服系統</h5>
+            </div>
+
+            <div class="box">
+                <img src="~/assets/images/siang.png" />
+                <h3>HUANG,BO-SIANG</h3>
+                <h5>公告系統 & 專注系統</h5>
+            </div>
+
+            <div class="box">
+                <img src="~/assets/images/lin.png" />
+                <h3>ZENG,YU-LIN </h3>
+                <h5>結帳系統</h5>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+

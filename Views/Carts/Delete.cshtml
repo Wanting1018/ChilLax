@@ -1,0 +1,40 @@
+﻿@model ChilLaxFrontEnd.Models.Cart
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>確定要清空購物車嗎？</h3>
+<div>
+    <h4>Cart</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CartProductQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CartProductQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Member)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Member.MemberId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductId)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="MemberId" />
+        <input type="hidden" asp-for="ProductId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,1003 @@
+@section Styles{
+    @*點數紀錄---------------------------------------------------------------------------------------------------*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+	<link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+	<style>
+		body {
+			background-color: #deeeff;
+		}
+
+    <style>
+
+        th, td {
+            font-size: 1.3rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    @*點數紀錄---------------------------------------------------------------------------------------------------*@
+    <style>
+        body {
+            background-color: #deeeff;
+        }
+
+        .articleMC {
+            display: flex;
+            justify-content: center;
+            /*align-items: center;*/
+            /*height: 100vh; 確認分頁高度再調*/
+            padding: 50px 0;
+        }
+
+        .containerMC {
+            width: 1000px;
+            background-color: #fff;
+            padding: 10px 30px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+
+        .tabMC_box {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 2px solid rgba(229, 229, 229);
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+        }
+
+            .tabMC_box .tab_btn {
+                font-size: 18px;
+                font-weight: 600;
+                color: #919191;
+                background: none;
+                border: none;
+                padding: 18px;
+                cursor: pointer;
+            }
+
+                .tabMC_box .tab_btn.active {
+                    color: #7360ff;
+                }
+
+        .contentMC_box {
+            padding: 10px;
+        }
+
+            .contentMC_box .contentMC {
+                display: none;
+                animation: moving 0.5s ease;
+            }
+
+        @@keyframes moving {
+            from {
+                transform: translateX(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0px);
+                opacity: 1;
+            }
+        }
+
+        .contentMC_box .contentMC.active {
+            display: block;
+        }
+
+        .contentMC_box .contentMC h2 {
+            margin-bottom: 10px;
+        }
+
+        .line {
+            position: absolute;
+            top: 66px;
+            left: 21px;
+            width: 108px;
+            height: 5px;
+            background-color: #7360ff;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /*個人資料*/
+        .profile-mc .form-mc label {
+            display: inline-block;
+            width: 120px;
+            font-size: 18px;
+            /* font-weight: bold; */
+            /* text-align: center; */
+            color: #000000;
+            margin-left: 5px;
+            margin-right: 50px;
+        }
+
+        .profile-mc .form-mc .span-mc {
+            display: inline-block;
+            width: 120px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000000;
+            margin-left: 5px;
+        }
+
+
+
+        .profile-mc .form-mc {
+            width: 600px;
+            height: 40px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+            .profile-mc .form-mc input, .profile-mc .form-mc .genderMC {
+                height: 90%;
+                width: 50%;
+                border: 1px solid #ddd;
+                font-size: 18px;
+                padding-right: 20px;
+                transition: border-color 0.3s;
+                text-align: center;
+            }
+
+                .profile-mc .form-mc input:focus, .profile-mc .form-mc .genderMC:focus {
+                    border-color: #5CADAD;
+                    outline: none;
+                    box-shadow: 0 0 5px #5CADAD;
+                }
+
+            .profile-mc .form-mc a {
+                color: #1961af;
+                text-decoration: none;
+                font-size: 18px;
+            }
+
+                .profile-mc .form-mc a:hover {
+                    color: rgb(34, 46, 69);
+                    text-decoration: underline;
+                }
+
+            .profile-mc .form-mc .btn-mc {
+                position: absolute;
+                right: 0;
+                bottom: 10px;
+            }
+
+                .profile-mc .form-mc .btn-mc button {
+                    display: inline-block;
+                    width: 120px;
+                    border-radius: 4px;
+                    margin-left: 12px;
+                    text-align: center;
+                    padding: 6px 12px;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
+
+                .profile-mc .form-mc .btn-mc .cancelBtn {
+                    background-color: #fff;
+                    color: #000000;
+                    border: 1px solid #d3d3d3b3;
+                }
+
+                    .profile-mc .form-mc .btn-mc .cancelBtn:hover {
+                        border: 1px solid #000000;
+                    }
+
+                .profile-mc .form-mc .btn-mc .saveBtn {
+                    background-color: #4F9D9D;
+                    color: #fff;
+                }
+
+                    .profile-mc .form-mc .btn-mc .saveBtn:hover {
+                        background-color: #fff;
+                        color: #4F9D9D;
+                        border: 1px solid #4F9D9D;
+                    }
+
+        .validation-error-message {
+            color: red;
+            font-size: 12px;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .btn {
+            width: 120px;
+        }
+
+		.clickable-row {
+			cursor: pointer;
+		}
+
+
+        /*修改密碼*/
+        .popup-wrap {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            content: "";
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .popup-box {
+            width: 50%;
+            padding: 50px 75px;
+            transform: translate(-50%, -50%) scale(0.5);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.5);
+            border-radius: 3px;
+            background: #fff;
+            text-align: center;
+            height: 500px;
+        }
+
+        .close-btn {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border-radius: 100%;
+            background: #d75f70;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+            line-height: 40px;
+            font-size: 32px;
+        }
+
+        .transform-in,
+        .transform-out {
+            display: block;
+            -webkit-transition: all ease 0.5s;
+            transition: all ease 0.5s;
+        }
+
+        .transform-in {
+            -webkit-transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .transform-out {
+            -webkit-transform: translate(-50%, -50%) scale(0.5);
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
+        .contentMcPwd {
+            width: 100%;
+            height: 350px;
+        }
+
+            .contentMcPwd h3 {
+                text-align: center;
+                font-size: 38px;
+                left: 50%;
+                transform: translate(-55%, 0);
+                position: relative;
+            }
+
+            .contentMcPwd .input-box {
+                margin: 30px 0;
+                height: 45px;
+            }
+
+            .contentMcPwd .input-box input {
+                border: none;
+                border-bottom: 1px dotted black;
+                padding: 5px 0 5px 5px;
+                height: 42px;
+                font-size: 32px;
+            }
+
+            .contentMcPwd .input-box input:focus {
+                border-color: #438989;
+                outline: none;
+            }
+
+        .resendBtn {
+            width: 200px;
+            height: 65px;
+            margin-top: 20px;
+            position: relative;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #4f9d9d;
+            font-size: 28px;
+            color: #fff;
+            box-shadow: rgba(0, 0, 0, 0.4);
+            font-weight: bolder;
+            padding: 10px;
+        }
+
+            .resendBtn:hover {
+                background-color: #fcfcfc;
+                border: 1px solid #4f9d9d;
+                border-radius: 2px;
+                color: #4f9d9d;
+            }
+
+        .pwdVisibility {
+            color: rgb(0, 0, 0);
+            font-size: 16px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .contentMcPwd i {
+            font-size: 30px;
+        }
+
+    </style>
+}
+<title>會員中心</title>
+@model ChilLaxFrontEnd.ViewModels.OrderViewModel
+<div class="articleMC">
+	<div class="containerMC">
+		<div class="tabMC_box">
+			<button class="tab_btn active">個人資料</button>
+			<button class="tab_btn">點數查詢</button>
+			<button class="tab_btn">訂單查詢</button>
+			<button class="tab_btn">客服中心</button>
+			<div class="line"></div>
+		</div>
+		<div class="contentMC_box">
+			<div class="contentMC active">
+				<form id="editMemberProfile">
+					<div class="profile-mc">
+						<div class="form-mc">
+							<i class="fa-sharp fa-regular fa-pen-to-square"></i>
+							<span class="span-mc">編輯會員資料</span>
+							<input type="text" id="memberId" name="memberId" class="hidden" value="@Model.memberId" />
+							@*@Html.TextBoxFor(model => model.memberId, new { @class = "hidden" })*@
+						</div>
+						<div class="form-mc">
+							<i class="fas fa-user"></i>
+							<label>姓名</label>
+							<input type="text" id="memberName" name="memberName" value="@Model.memberName" autocomplete="off" required />
+						</div>
+						<div class="form-mc">
+							<i class="fa-solid fa-phone"></i>
+							<label>手機號碼</label>
+							<input type="tel" id="memberTel" name="memberTel" value="@Model.memberTel" autocomplete="off" required />
+						</div>
+						<div class="form-mc">
+							<i class="fa-solid fa-envelope"></i>
+							<label>信箱</label>
+							<input type="email" id="memberEmail" name="memberEmail" value="@Model.memberEmail" autocomplete="off" required readonly/>
+						</div>
+						<div class="form-mc">
+							<i class="fa-solid fa-children"></i>
+							<label>性別(選填)</label>
+							<select id="memberSex" name="memberSex" class="genderMC" value="@Model.memberSex">
+								@if (Model.memberSex == true)
+								{
+									<option>-- 請選擇 --</option>
+									<option value="1" selected>男</option>
+									<option value="0">女</option>
+								}
+								else if (Model.memberSex == false)
+								{
+									<option>-- 請選擇 --</option>
+									<option value="1">男</option>
+									<option value="0" selected>女</option>
+								}
+								else
+								{
+									<option selected>-- 請選擇 --</option>
+									<option value="1">男</option>
+									<option value="0">女</option>
+								}
+							</select>
+						</div>
+						<div class="form-mc">
+							<i class="fa-solid fa-cake-candles"></i>
+							<label>出生年月日</label>
+							@*<input type="date" id="memberBirthday" name="memberBirthday" value="@Model.memberBirthday" required />*@
+							@Html.EditorFor(model => model.memberBirthday, new { type = "date",id="memberBirthday" ,name="memberBirthday",required = "required"})
+						</div>
+						<div class="form-mc">
+							<i class="fa-solid fa-map-location-dot"></i>
+							<label>通訊地址(選填)</label>
+							<input type="text" id="memberAddress" name="memberAddress" value="@Model.memberAddress" autocomplete="off" />
+						</div>
+						<div class="form-mc">
+							<i class="fa-solid fa-lock"></i>
+							<label>密碼</label>
+                            <a href="#letmeopen" class="popup-btn">設定新密碼</a>
+						</div>
+						<div class="form-mc col-md-12">
+							<div class="btn-mc">
+								<button class="cancelBtn">取消</button>
+								<button class="saveBtn" type="submit">儲存變更</button>
+							</div>
+						</div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="contentMC">
+                <h2>點數查詢</h2>
+                <div id="app" style="margin-top: 50px">
+                    <div class="container" style="width: 95%" v-cloak >
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="dropdown">
+                                    <span>交易來源</span>&nbsp&nbsp
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="border-radius: 10px">
+                                        {{ selectedOption }}
+                                        <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('All')">All</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Focus')">Focus</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Tarot')">Tarot</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Product')">Product</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <span>交易起始日</span>&nbsp
+                                <input type="date" name="start" v-model="startDate" style="border-radius: 10px; padding: 5px" /> ~
+                                <span>交易終止日</span>&nbsp
+                                <input type="date" name="end" v-model="endDate" style="border-radius: 10px; padding: 5px" />
+                            </div>
+
+                            <table class="table table-hover" style="margin-top: 30px">
+                                <thead>
+                                    <tr>
+                                        <th>交易來源</th>
+                                        <th>交易內容</th>
+                                        <th>異動數量 <i :class="{'bi':true, 'bi-sort-up': sortTypeA==='asc', 'bi-sort-down':sortTypeA !== 'asc'}" @@click="sortHandler('modifiedAmount')"></i></th>
+                                        <th>交易時間 <i :class="{'bi':true, 'bi-sort-up': sortTypeT==='asc', 'bi-sort-down':sortTypeT !== 'asc'}" @@click="sortHandler('modifiedTime')"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="{modifiedSource, content, modifiedAmount, modifiedTime} in pointRecords" :style="getRowStyle(modifiedSource)">
+                                        <td>{{modifiedSource}}</td>
+                                        <td>{{content}}</td>
+                                        <td>{{modifiedAmount}}</td>
+                                        <td>{{modifiedTime}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <nav aria-label="Page navigation" style="text-align: center">
+                                <ul class="pagination">
+                                    <li class="page-item" v-for="page in totalPages"><a class="page-link" href="#" @@click="pagingHandler(page)">{{ page }}</a></li>
+                                </ul>
+                            </nav>
+                            @*  {{pointRecords}}*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contentMC">
+                <h2>訂單查詢</h2>
+                <div class="productOrder">
+                    <table class="table table-primary table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    訂單編號
+                                </th>
+                                <th>
+                                    訂單總價
+                                </th>
+                                <th>
+                                    訂單日期
+                                </th>
+                                <th>
+                                    物流地址
+                                </th>
+                                <th>
+                                    訂單備註
+                                </th>
+                                <th>
+                                    訂單狀態
+                                </th>
+                                <th>
+                                    付款狀態
+                                </th>
+                            </tr>
+                        </thead>
+						<tbody>
+							@foreach (var group in Model.memberOrder.GroupBy(order => order.ProductOrder.FirstOrDefault()?.OrderId).OrderByDescending(g => g.Key))
+							{
+								var firstOrder = group.FirstOrDefault(); // 獲得群組後第一筆訂單
+								<tr class="clickable-row">
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderId)</td>
+									<td>$ @(firstOrder.ProductOrder.FirstOrDefault()?.OrderTotalPrice)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderDate)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderAddress)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderNote)</td>
+									<td>@(firstOrder.ProductOrder.FirstOrDefault()?.OrderState)</td>
+									<td>
+                                        @if (firstOrder.ProductOrder.FirstOrDefault()?.OrderPayment == false)
+                                        {
+                                            @Html.ActionLink("付款", "Index2", "checkout", new { orderId = firstOrder.ProductOrder.FirstOrDefault()?.OrderId }, new { @class = "btn btn-success" })
+                                        }
+                                        else
+                                        {
+                                            <button class="btn" disabled> 已付款 </button>
+                                        }
+									</td>
+								</tr>
+								<tr class="details-row" id="details-row-@(firstOrder.ProductOrder.FirstOrDefault()?.OrderId)" style="display: none;">
+									<td colspan="8">
+										<!-- 詳細資料區塊 -->
+										<table class="table table-sm">
+											<thead>
+												<tr>
+													<th>@Html.DisplayNameFor(model => firstOrder.Product.ProductName)</th>
+													<th>@Html.DisplayNameFor(model => firstOrder.orderDetails.FirstOrDefault().CartProductQuantity)</th>
+													<th>@Html.DisplayNameFor(model => firstOrder.Product.ProductPrice)</th>
+													<th>Subtotal</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach (var detail in group)
+												{
+													<tr>
+														<td>@(detail.Product?.ProductName)</td>
+														<td>@(detail.orderDetails?.FirstOrDefault().CartProductQuantity)</td>
+														<td>@(detail.Product?.ProductPrice)</td>
+														<td>@(detail.orderDetails?.FirstOrDefault().CartProductQuantity * detail.Product?.ProductPrice)</td>
+													</tr>
+												}
+											</tbody>
+										</table>
+									</td>
+								</tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+			<div class="contentMC">
+				<div class="container" style="width:auto">
+					<table id="customerServiceTable" class="display" style="width:95%">
+						<thead>
+							<tr>
+
+								<th>回饋時間</th>
+								<th>回饋訊息</th>
+								<th>客服回覆訊息</th>
+								<th>客服回覆時間</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="popup-wrap" id="letmeopen">
+    <div class="popup-box transform-out">
+        <div class="contentMcPwd">
+            <h3>編輯密碼</h3>
+            <form id="editPwd">
+                <div class="input-box">
+                    <i class="bi bi-key"></i>
+                    <input type="password"
+                           id="memberPwd"
+                           name="memberPassword"
+                           autocomplete="off"
+                           placeholder="舊密碼"
+                           required />
+                    <button type="button"
+                            class="pwdVisibility"
+                            id="togglePwd"
+                            onclick="togglePasswordVisibility('memberPwd', 'togglePwd')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <div class="input-box">
+                    <i class="bi bi-key"></i>
+                    <input type="password"
+                           id="memberNewPwd"
+                           name="memberConfirmPassword"
+                           autocomplete="off"
+                           placeholder="新密碼(至少8個字元)"
+                           required />
+                    <button type="button"
+                            class="pwdVisibility"
+                            id="toggleChkPwd"
+                            onclick="togglePasswordVisibility('memberNewPwd', 'toggleChkPwd')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <div class="input-box">
+                    <i class="bi bi-key"></i>
+                    <input type="password"
+                           id="memberChkPwd"
+                           name="memberConfirmPassword"
+                           autocomplete="off"
+                           placeholder="確認新密碼"
+                           required />
+                    <button type="button"
+                            class="pwdVisibility"
+                            id="toggleChkPwd"
+                            onclick="togglePasswordVisibility('memberChkPwd', 'toggleChkPwd')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <button class="resendBtn" type="submit">送出</button>
+            </form>
+        </div>
+        <a class="close-btn popup-close" href="#">x</a>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+	<script>
+		const tabs = document.querySelectorAll(".tab_btn");
+		const all_content = document.querySelectorAll(".contentMC");
+
+        tabs.forEach((tab, index) => {
+            tab.addEventListener("click", (e) => {
+                tab.classList.toggle("active");
+
+                tabs.forEach((otherTab) => {
+                    if (otherTab !== tab) {
+                        otherTab.classList.remove("active");
+                    }
+                });
+
+                var line = document.querySelector(".line");
+                line.style.width = e.target.offsetWidth + "px"; // 被點擊的 tab 的寬度來設定
+                line.style.left = e.target.offsetLeft + "px"; // 被點擊的 tab 的左側位置來設定
+
+                all_content.forEach((content) => {
+                    content.classList.remove("active");
+                });
+                all_content[index].classList.add("active");
+            });
+        });
+
+        document.getElementById("editMemberProfile").addEventListener("submit", function (event) {
+            event.preventDefault();
+            let memberId = document.getElementById("memberId").value;
+            let memberName = document.getElementById("memberName").value;
+            let memberTel = document.getElementById("memberTel").value;
+            let memberEmail = document.getElementById("memberEmail").value;
+            let memberSex = document.getElementById("memberSex").value;
+            let memberBirthday = document.getElementById("memberBirthday").value;
+            let memberAddress = document.getElementById("memberAddress").value;
+
+            if (!memberName || !memberTel || !memberEmail || !memberBirthday) {
+                alert("請輸入必填欄位!");
+                return false;
+            }
+            let isMale = "";
+
+            if (memberSex == "0") {
+                isMale = false;
+            } else if (memberSex == "1") {
+                isMale = true;
+            } else {
+                isMale = null;
+            }
+            const formData = {
+                memberId: memberId,
+                memberName: memberName,
+                memberTel: memberTel,
+                memberEmail: memberEmail,
+                memberSex: isMale,
+                memberBirthday: memberBirthday,
+                memberAddress: memberAddress
+            }
+            console.log(JSON.stringify(formData));
+
+            $.ajax({
+                type: "POST",
+                url: "/api/Members/editMemberProfile",
+                data: JSON.stringify(formData),
+                contentType: "application/json; charset=utf-8 ",
+            }).done(data => {
+                if (!data.success) {
+                    alert(data.message);
+                    return false;
+                }
+                alert(data.message);
+                window.location.href = "https://localhost:5000/Home/Index";
+            }).fail((jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status === 400) {
+                    const errorResponse = jqXHR.responseJSON;
+                    alert(errorResponse.message);
+                } else {
+                    console.error("AJAX error:", textStatus, errorThrown);
+                }
+            });
+        })
+    </script>
+    <script>
+        //修改密碼
+        function togglePasswordVisibility(inputId, toggleButtonId) {
+            console.log("togglePasswordVisibility");
+
+            var passwordInput = document.getElementById(inputId);
+            var toggleButton = document.getElementById(toggleButtonId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        }
+
+
+        $(".popup-btn").click(function () {
+            var href = $(this).attr("href");
+            $(href).fadeIn(250);
+            $(href)
+                .children$("popup-box")
+                .removeClass("transform-out")
+                .addClass("transform-in");
+            e.preventDefault();
+        });
+
+        $(".popup-close").click(function () {
+            closeWindow();
+        });
+        // $(".popup-wrap").click(function(){
+        //   closeWindow();
+        // })
+        function closeWindow() {
+            $(".popup-wrap").fadeOut(200);
+            $(".popup-box").removeClass("transform-in").addClass("transform-out");
+            event.preventDefault();
+        }
+
+
+        document.getElementById("editPwd").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let memberPassword = document.getElementById("memberPwd").value;
+            let memberNewPassword = document.getElementById("memberNewPwd").value;
+            let memberConfirmPassword = document.getElementById("memberChkPwd").value;
+
+
+
+            if ((memberPassword.trim() === "") || (memberNewPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+                alert("請輸入所有欄位!");
+                return false;
+            }
+            let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+            if (!passwordPattern.test(memberNewPassword)) {
+                alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
+                return false;
+            }
+
+            if (memberConfirmPassword !== memberNewPassword) {
+                alert("請確認密碼是否相同!")
+                return false;
+            }
+
+
+            const formData =
+            {
+                memberPassword: memberPassword,
+                memberNewPassword: memberNewPassword
+            }
+
+            console.log(JSON.stringify(formData));
+
+            $.ajax({
+                type: "POST",
+                url: "/api/Members/editPwd",
+                data: JSON.stringify(formData),
+                contentType: "application/json"
+            }).done(data => {
+                if (!data.success) {
+                    alert(data.message);
+                    return false;
+                } else if (data.login == false) {
+                    alert(data.message);
+                    window.location.href = "https://localhost:5000/Login/Login";
+                }
+                alert(data.message);
+                window.location.href = "https://localhost:5000/Login/editMemberProfile";
+
+            }).fail((jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status === 400) {
+                    const errorResponse = jqXHR.responseJSON;
+                    alert(errorResponse.message);
+                } else {
+                    console.error("AJAX error:", textStatus, errorThrown);
+                }
+            });
+            return false;
+        });
+
+
+    </script>
+
+    <script>
+        //點數紀錄-柏翔的部分
+        const { createApp, ref, watch } = Vue
+        createApp({
+            setup() {
+                const pointRecords = ref([]) // 點數紀錄
+                const selectedOption = ref("") // 下拉選單所選的內容
+                const startDate = ref("") // 交易起始日的值
+                const endDate = ref("") // 交易終止日的值
+                const sortBy = ref("")       // 排序的欄位
+                const sortTypeA = ref("asc")  // modifiedAmount是升冪還是降冪
+                const sortTypeT = ref("asc")  // modifiedTime是升冪還是降冪
+                const totalPages = ref()   // 總共有幾頁
+                const thePage = ref(1)       // 目前是第幾頁
+
+                const loadPointRecords = async () => {
+                    let API_URL = ''
+                    if (sortBy.value == "modifiedAmount") {
+                        API_URL = `/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
+                    }
+                    else {
+                        API_URL = `/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
+
+                    }
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                    })
+                    const datas = await response.json()
+                    pointRecords.value = datas.pointRecords
+                    totalPages.value = datas.totalPages
+                }
+                loadPointRecords()
+
+
+                // 下拉選單功能---------------------------------------------------------------------------------------------
+                // 按下選項就觸發方法
+                const updateSelected = (option) => {
+                    selectedOption.value = option
+                    console.log(option)
+                }
+
+                // 監看交易來源有沒有改變
+                watch(selectedOption, () => {
+                    loadPointRecords()
+                })
+
+                // 日期區段功能---------------------------------------------------------------------------------------------
+                // 監看起始日有沒有改變
+                watch(startDate, (newValue) => {
+                    console.log(newValue)
+                    loadPointRecords()
+                })
+                // 監看終止日有沒有改變
+                watch(endDate, (newValue) => {
+                    console.log(newValue)
+                    loadPointRecords()
+                })
+
+                // 排序功能---------------------------------------------------------------------------------------------
+                // 按下異動數量欄位的排序icon就觸發方法
+                const sortHandler = type => {
+                    sortBy.value = type
+                    if (type == "modifiedAmount") {
+                        sortTypeA.value = sortTypeA.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                    }
+                    else {
+                        sortTypeT.value = sortTypeT.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                    }
+
+                    console.log(sortBy.value, sortTypeA.value, sortTypeT.value)
+                    //thePage.value = 1
+                    loadPointRecords()
+                }
+
+                // 列的顏色 (根據modifiedSource而定)---------------------------------------------------------------------------------------------
+                const getRowStyle = modifiedSource => {
+                    console.log(modifiedSource);
+                    // 如果 modifiedSource 是 "focus"
+                    if (modifiedSource === "focus") {
+                        return { backgroundColor: "#DFFFFF" };
+                    }
+                    // 如果 modifiedSource 是 "tarot"
+                    if (modifiedSource === "tarot") {
+                        return { backgroundColor: "#D1FFDF" };
+                    }
+                    // 如果 modifiedSource 是 "product"
+                    if (modifiedSource === "product") {
+                        return { backgroundColor: "#FEFFDF" };
+                    }
+                    // 預設情況下，不應用任何額外的 CSS 類，保持預設的背景色
+                    return {};
+                };
+
+                //分頁功能---------------------------------------------------------------------------------------------
+                const pagingHandler = page => {
+                    thePage.value = page
+                    loadPointRecords()
+                }
+
+                return {
+                    pointRecords,
+                    updateSelected,
+                    selectedOption,
+                    startDate,
+                    endDate,
+                    sortHandler,
+                    sortTypeA,
+                    sortTypeT,
+                    sortBy,
+                    getRowStyle,
+                    totalPages,
+                    pagingHandler,
+                    thePage
+                }
+            }
+        }).mount('#app')
+    </script>
+    <script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const clickableRows = document.querySelectorAll(".clickable-row");
+			clickableRows.forEach(row => {
+				row.addEventListener("click", function () {
+					const orderId = row.querySelector("td:first-child").textContent.trim();
+					const detailsRow = document.getElementById("details-row-" + orderId);
+					detailsRow.style.display = detailsRow.style.display === "none" ? "table-row" : "none";
+				});
+			});
+		});
+	</script>
+	
+	<script>
+		
+		$(document).ready(function () {
+			
+			var table = $("#customerServiceTable").DataTable({
+				ajax: {
+					type: "GET",
+                    url: "@Url.Content("~/api/CustomerServicesApi")",
+                    //url: "/api/CustomerServicesApi",
+					dataSrc: function (data) { return data; }
+				},
+				columns: [
+
+					{ "data": "messageDatetime", "width": "25%" },
+					{ "data": "message", "width": "25%" },
+					{ "data": "reply", "width": "25%" },
+					{ "data": "replyDatetime", "width": "25%" },
+				],
+				fixedHeader: {
+					header: true
+				},
+				language: {
+					url: 'https://cdn.datatables.net/plug-ins/1.13.5/i18n/zh-HANT.json',
+				},
+				order: [[0, 'desc']]
+			});
+
+
+
+		});
+	</script>
+}

@@ -1,0 +1,385 @@
+﻿@{
+    ViewData["Title"] = "AI占卜";
+}
+
+
+<h1 class="AItitle">Tarot Oasis</h1>
+@section Styles{
+    <link href="/assets/css/Tarot_css/Tarotstyle.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        
+        h1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e6daff, #cc99ff);
+        }
+        .AItitle{
+            color: #6C3365;
+            font-size: 60px;
+            animation: neon 3.2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes neon {
+          0%,
+          100% {
+                text-shadow: 0 0 20px #FFE6FF, 0 0 100px #FFE6FF, 0 0 20px #FFE6FF;
+          }
+          50% {
+                text-shadow: 0 0 50px #FFE6FF, 0 0 150px #FFE6FF, 0 0 50px #FFE6FF;
+                color: #FFAAD5;
+          }
+        }
+        
+
+        .timeBtn {
+            margin-top: 20px;
+            padding: 0.6em 2em;
+            border: none;
+            outline: none;
+            color: #fff;
+            background-color: #BE77FF;
+            cursor: pointer;
+            position: relative;
+            z-index: 0;
+            border-radius: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        @@keyframes glowing-timeBtn {
+        0% {
+            background-position: 0 0;
+        }
+
+        50% {
+            background-position: 400% 0;
+        }
+
+        100% {
+            background-position: 0 0;
+        }
+    }
+
+            .timeBtn:before {
+                content: "";
+            background: linear-gradient( 45deg, #e6daff, #cc99ff);
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                background-size: 400%;
+                z-index: -1;
+                filter: blur(5px);
+                -webkit-filter: blur(5px);
+                width: calc(100% + 4px);
+                height: calc(100% + 4px);
+                animation: glowing-timeBtn 20s linear infinite;
+                transition: opacity 0.3s ease-in-out;
+                border-radius: 10px;
+            }
+
+        .form-control{
+            background: #E2C2DE;
+        }
+
+        .list-group-item{
+            background-color: #FF95CA;
+        }
+        .timeBtn:after {
+            z-index: -1;
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #FF95CA;
+            left: 0;
+            top: 0;
+            border-radius: 10px;
+        }
+
+        .tarot-card{
+            background: linear-gradient(135deg, #cc99ff, #FFAAD5);
+        }
+        .button-container {
+            
+            display: grid;
+            place-items: center;
+            
+        }
+
+        .tarot-container{
+            margin-top: 10px;
+        }
+
+        .form-control{
+            border-radius: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stylebtn{
+            position: relative;
+            left: 670px;
+        }
+
+        .chatRoom{
+            text-transform: capitalize;
+            background-image: linear-gradient(-225deg, #6C3365 0%, #FFAAD5 100%);
+            background-size: auto auto;
+            background-clip: border-box;
+            background-size: 200% auto;
+            color: #6C3365;
+            background-clip: text;
+            text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textclip 2s linear infinite;
+            display: inline-block;
+            font-size: 30px;
+        }
+
+        /*情境字幕動畫*/
+        @@keyframes textclip {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        
+        .chat-container {
+            background: linear-gradient(135deg, #cc99ff, #FFAAD5);
+            height: 400px;
+            overflow-y: scroll; /* 設置滾動條，使內容超出高度時可以滾動 */
+        }
+
+        .fortuneTeller {
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
+        .fortuneTeller img {
+            max-width: 100%; /* 確保圖片不超過父元素的寬度 */
+            max-height: 100%; /* 確保圖片不超過父元素的高度 */
+        }
+
+        .col-8{
+            margin-bottom: 120px;
+        }
+    </style>
+
+        
+}
+<div class="col-md fortuneTeller">
+    <img src="~/assets/images/占卜師.png" />
+    
+</div>
+
+<div class="button-container" id="sureBtnContainer">
+    <button class="timeBtn" id="Surebtn">是否開始占卜?</button>
+</div>
+
+<div class="tarot-container" >
+    <div class="tarot-card" id="card1">
+
+        <div class="card-name" id="cardName1"></div>
+    </div>
+    <div class="tarot-card" id="card2">
+
+        <div class="card-name" id="cardName2"></div>
+    </div>
+    <div class="tarot-card" id="card3">
+
+        <div class="card-name" id="cardName3"></div>
+    </div>
+    
+</div>
+
+<div id="btnContainer" style="display: none;">
+    <div class="button-container">
+        <button class="timeBtn" id="shuffleBtn">請沉澱您的心靈後點擊按鈕</button>
+    </div>
+</div>
+<div class="container">
+<div class="text-center chat-container" id="chatContainer" style="display: none;">
+    <div class="col-12">
+        <h3 class="chatRoom">神祕小房間</h3>
+            <ul class="list-group" id="Content" style="background-color: #FF95CA;">
+                
+        </ul>
+    </div>
+</div>
+
+<div class="text-center" id="inputContainer" style="display: none;">
+    <div class="col-8 mx-auto">
+        
+        <div class="mb-3">
+            <input type="text" placeholder="請輸入您心中的疑問" class="form-control" id="message" autocomplete="off">
+        </div>
+
+            <button type="button" class="btn btn-primary timeBtn" id="sendButton">解惑</button>
+    </div>
+</div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/Tarot/Tarot.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        let pointAdd = -300;
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        //與Server建立連線
+        connection.start().then(function () {
+            console.log("Hub 連線完成");
+        }).catch(function (err) {
+            alert('連線錯誤: ' + err.toString());
+        });
+
+        shuffleBtn.addEventListener("click", function () {
+
+            document.getElementById("chatContainer").style.display = "block";
+            document.getElementById("inputContainer").style.display = "block";
+        });
+        // 更新連線 ID 列表事件
+        connection.on("UpdList", function (jsonList) {
+            var list = JSON.parse(jsonList);
+            $("#IDList li").remove();
+            for(i=0; i<list.length; i++)
+            {
+                $("#IDList").append($("<li></li>").attr("class", "list-group-item").text(list[i]));
+            }
+        });
+
+        // 更新用戶個人連線 ID 事件
+        connection.on("UpdSelfID", function (id) {
+            $('#SelfID').html(id);
+        });
+
+        // 更新聊天內容事件
+        connection.on("UpdContent", function (msg) {
+            $("#Content").append($("<li></li>").attr("class", "list-group-item").text(msg));
+        });
+
+        //傳送訊息
+        $('#sendButton').on('click', function() {
+            let selfID = $('#SelfID').html();
+            let message = $('#message').val();
+            let sendToID = $('#sendToID').val();
+            connection.invoke("SendMessage", selfID, message, sendToID).catch(function (err) {
+                
+            });
+        });
+        function _uuid() {
+            var d = Date.now();
+            if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+                d += performance.now(); //use high-precision timer if available
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        }
+
+
+        //let potID = _uuid();
+        let memberPoints = 0;
+        document.getElementById("Surebtn").addEventListener("click", function () {
+            let potID = _uuid();
+            let pointAdd = -300;
+
+            var TarotPointDTO = {
+                pointDetailId: potID,
+
+                modifiedSource:"Tarot",
+                modifiedAmount:-300,
+            };
+            // 發送 GET 請求獲取會員點數
+            $.ajax({
+                type: "GET",
+                url: "@Url.Content("~/api/TarotPointHistories")",
+                //url: "/api/TarotPointHistories"
+            }).done(data => {
+                const memberPoints = data;
+                console.log(memberPoints)
+                // 檢查點數是否足夠
+                if (memberPoints >= 300) {
+                    // 足夠點數，詢問會員是否要使用點數進行占卜
+                    
+                    const confirmResult = confirm("您目前有 " + memberPoints + " 點，是否要使用 300 點進行占卜呢？");
+                    if (confirmResult) {
+                        // 使用 POST 請求新增點數記錄
+                        Surebtn.classList.add("fadeOutButton");
+
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Content("~/api/TarotPointHistories")",
+                            //url: "/api/TarotPointHistories",
+                            data: JSON.stringify(TarotPointDTO),
+                            contentType: "application/json"                            
+                        }).done(result => {
+                            // 在此處理成功新增點數記錄的情況
+                            
+                            alert("您的點數已成功扣除 300 點，可以進行占卜了！");
+                            // 啟動洗牌按鈕進行占卜
+                            document.getElementById("sureBtnContainer").style.display = "none";
+                            //document.getElementById("tarotContainer").style.display = "block";
+                            document.getElementById("btnContainer").style.display = "block";
+                            
+
+                        }).fail(err => {
+                            // 在此處理新增點數記錄失敗的情況
+                            alert("新增點數記錄時發生錯誤：" + err.statusText);
+                        });
+                    }
+                } else {
+                    // 不足夠點數
+                    alert("您的點數不足，請充值後再進行占卜！");
+                }
+            }).fail(err => {
+                alert("獲取會員點數時發生錯誤：" + err.statusText);
+            });
+
+            
+
+            // 更新使用者 session 及 Member 資料表中的總點數
+            var pointAddValue = pointAdd; // 將 Razor 變數傳遞給 JavaScript 變數
+            var apiUrl = "@Url.Content("~/api/TarotPointHistories")";
+            //fetch(`/api/SessionData/UpdatePoint/${pointAdd}`
+
+            fetch(`${apiUrl}/${pointAddValue}`, {
+            
+                method: 'POST',
+                credentials: 'same-origin' // 確保携帶相同的cookie信息
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('網路錯誤，無法更新點數');
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    console.log(result); // 在控制台印出更新成功的訊息
+                })
+                .catch(error => {
+                    console.error('發生錯誤：', error); // 如果發生錯誤，印出錯誤訊息
+                });
+
+        });
+
+    </script>
+}

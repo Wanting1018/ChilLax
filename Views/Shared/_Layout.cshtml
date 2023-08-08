@@ -1,0 +1,346 @@
+﻿@using ChilLaxFrontEnd.ViewModels;
+@using System.Text.Json
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ChilLaxFrontEnd.styles.css" asp-append-version="true" />*@
+    <link rel="icon" href="/assets/images/logo1.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="assets/images/favicons/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link href="/assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Template specific stylesheets-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Volkhov:400i"
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/d60327df73.js" crossorigin="anonymous"></script>
+    <link href="/assets/lib/animate.css/animate.css" rel="stylesheet" />
+    <link href="/assets/lib/et-line-font/et-line-font.css" rel="stylesheet" />
+    <link href="/assets/lib/flexslider/flexslider.css" rel="stylesheet" />
+
+    <link href="/assets/lib/owl.carousel/dist/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="/assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="/assets/lib/magnific-popup/dist/magnific-popup.css" rel="stylesheet" />
+    <link href="/assets/lib/simple-text-rotator/simpletextrotator.css" rel="stylesheet" />
+    <!-- Main stylesheet and color file-->
+    <link href="/assets/css/style.css" rel="stylesheet" />
+    <link id="color-scheme" href="/assets/css/colors/default.css" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", required: false)
+    <style>
+        #logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        #user-info:hover {
+            cursor: pointer;
+        }
+
+        /*使用者資訊*/
+        .sub-menu-wrap {
+            position: absolute;
+            top: 100%;
+            right: 10%;
+            width: 320px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in;
+        }
+
+            .sub-menu-wrap.open-menu {
+                max-height: 400px
+            }
+
+        .sub-menu {
+            background: #F1EDEE;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            opacity: 0.9
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+            .user-info h3 {
+                font-weight: 500;
+            }
+
+            .user-info p {
+                align-self: center; /* 將 p 元素自身垂直對齊到 center */
+                margin: 0; /* 清除預設的 margin，使其垂直居中 */
+            }
+
+        .sub-menu-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #525252;
+            margin: 12px 0;
+        }
+
+            .sub-menu-link p {
+                width: 80%;
+                font-size: 1.3rem;
+                transform: translateY(35%);
+            }
+
+            .sub-menu-link:hover p {
+                font-weight: 600;
+                color: #525252;
+            }
+
+            .sub-menu-link img {
+                width: 40px;
+                background: #e5e5e5;
+                border-radius: 30%;
+                padding: 8px;
+                margin-right: 15px;
+            }
+
+            .sub-menu-link span {
+                font-size: 22px;
+                transition: transform 0.5s;
+            }
+
+            .sub-menu-link:hover span {
+                transform: translateX(5px);
+                color: #525252;
+            }
+
+        /* 頁尾海浪*/
+        footer {
+            position: relative;
+            width: 100%;
+            background-color: #3586ff;
+            min-height: 100px;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            footer .wave {
+                position: absolute;
+                top: -100px;
+                left: 0px;
+                width: 100%;
+                height: 100px;
+                background: url(/assets/images/wave.png);
+                background-size: 1000px 100px;
+            }
+
+                footer .wave#wave1 {
+                    z-index: 100;
+                    opacity: 1;
+                    bottom: 0;
+                    animation: animationWave01 4s linear infinite;
+                }
+
+                footer .wave#wave2 {
+                    z-index: 99;
+                    opacity: 0.5;
+                    bottom: 10px;
+                    animation: animationWave02 4s linear infinite;
+                }
+
+                footer .wave#wave3 {
+                    z-index: 100;
+                    opacity: 0.2;
+                    bottom: 15px;
+                    animation: animationWave01 3s linear infinite;
+                }
+
+                footer .wave#wave4 {
+                    z-index: 99;
+                    opacity: 0.7;
+                    bottom: 20px;
+                    animation: animationWave02 3s linear infinite;
+                }
+
+        @@keyframes animationWave01 {
+            0% {
+                background-position-x: 1000px;
+            }
+
+            100% {
+                background-position-x: 0px;
+            }
+        }
+
+        @@keyframes animationWave02 {
+            0% {
+                background-position-x: 0px;
+            }
+
+            100% {
+                background-position-x: 1000px;
+            }
+        }
+
+        /*頁尾連結*/
+        #footer-link > div {
+            transition: transform 0.5s;
+        }
+
+            #footer-link > div:hover {
+                transform: scale(1.15);
+            }
+    </style>
+
+</head>
+<body>
+    <header style="height: 50px">
+        <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a asp-action="Index" asp-controller="Home">
+                        <img src="/assets/images/logo2.png" alt="" id="logo" />
+                    </a>
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home">
+                        ChilLax
+                    </a>
+                    <button class="navbar-toggle"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#custom-collapse">
+                        <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="custom-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a asp-action="Index" asp-controller="Home">Home</a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Focus">Focus</a>
+                        </li>
+                        <li>
+                            <a asp-action="TarotIndex" asp-controller="Tarot">Tarot</a>
+                        </li>
+                        <li>
+                            <a href="/Product/list" >Shop</a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="CustomerService">Customer Service</a>
+                            @*<a href="#">Customer Service</a>*@
+                        </li>
+                        <li style="height: 50px; padding: 8px 15px 15px 15px">
+                            <img id="user-info" src="/assets/images/user.png" style="width: 35px; border-radius: 50%" onclick="toggleMenu()" />
+                        </li>
+                    </ul>
+                </div>
+                <div class="sub-menu-wrap" id="subMenu">
+                    <div class="sub-menu">
+                        <div class="user-info">
+                            @{
+                                string json = Context.Session.GetString(CDictionary.SK_LOINGED_USER);
+                                Member member = JsonSerializer.Deserialize<Member>(json);
+                                <h3>@member.MemberName</h3>
+                            }
+                            <p><i class="fa-solid fa-coins fa-fade" style="color: #f2b202; font-size: 2rem"></i> @member.MemberPoint</p>
+                        </div>
+                        <hr style="border: 0; height: 1px; width: 100%; background: #ccc; margin: 15px 0 10px" />
+                        <a href="@Url.Action("editMemberProfile", "Login")" class="sub-menu-link">
+
+                            <img src="~/assets/images/edit.png" />
+                            <p>個人資料</p>
+                            <span>></span>
+                        </a>
+                        <a asp-action="PointRecord" asp-controller="Home" class="sub-menu-link">
+                            <img src="~/assets/images/footprint.png" />
+                            <p>點數紀錄</p>
+                            <span>></span>
+                        </a>
+                        <a href="@Url.Action("Logout", "Login")" class="sub-menu-link">
+                            <img src="~/assets/images/logout.png" />
+                            <p>登出</p>
+                            <span>></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+        <div class="scroll-up">
+            <a href="#totop"><i class="fa-solid fa-angles-up"></i></a>
+        </div>
+    </main>
+
+
+    <footer style="
+        margin-top: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+        bottom: 0
+      ">
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+
+
+        <div class="link" id="footer-link" style="display: flex; justify-content: center; align-items: center">
+            <div>
+                <a asp-action="Mission" asp-controller="Home" style="margin-right: 20px"><img src="/assets/images/peak.png" />Our Mission</a>
+            </div>
+            <div>
+                <a asp-action="Team" asp-controller="Home" style="margin-right: 20px"><img src="/assets/images/group.png" />Our Team</a>
+            </div>
+            <div>
+                <a asp-action="Attribution" asp-controller="Home" style="margin-right: 20px"><img src="/assets/images/present.png" alt="attribution" />Attribution</a>
+            </div>
+        </div>
+        <div style="text-align: center">
+            <h4 style="color: white"><i>"Leave stress behind, embrace a lighter mind"</i></h4>
+        </div>
+
+        <p style="color:black">©2023 ChilLax. For school project only.</p>
+    </footer>
+    <script>
+        let subMenu = document.querySelector('#subMenu');
+        function toggleMenu() {
+            subMenu.classList.toggle("open-menu");
+        }
+    </script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/assets/lib/jquery/dist/jquery.js"></script>
+    <script src="~/assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/assets/lib/wow/dist/wow.js"></script>
+    <script src="~/assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js"></script>
+    <script src="~/assets/lib/isotope/dist/isotope.pkgd.js"></script>
+    <script src="~/assets/lib/imagesloaded/imagesloaded.pkgd.js"></script>
+    <script src="~/assets/lib/flexslider/jquery.flexslider.js"></script>
+    <script src="~/assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
+    <script src="~/assets/lib/smoothscroll.js"></script>
+    <script src="~/assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+    <script src="~/assets/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
+    <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

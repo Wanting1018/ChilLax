@@ -1,0 +1,313 @@
+﻿@model List<ChilLaxFrontEnd.Models.DTO.CartDTO>
+@{
+    ViewData["Title"] = "購物車";
+}
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+}
+<style>
+    .productimg {
+        height: 150px;
+    }
+
+    .td_txt {
+        height: 150px;
+        line-height: 100px;
+        font-weight: bolder;
+        font-size: 14px;
+    }
+
+
+
+    ul, li {
+        margin: 0;
+        padding: 0;
+    }
+
+    .counter li {
+        float: left;
+        list-style-type: none;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border: #999 thin solid;
+        background-color: #fff
+    }
+
+        .counter li input {
+            font-size: 20px;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            -webkit-appearance: none;
+            background: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid transparent;
+            border-radius: 0;
+        }
+
+    #countnum {
+        border-left: hidden;
+        border-right: hidden;
+        color: #666
+    }
+
+    .cart-style {
+        margin: 0 auto;
+        width: 60%;
+        min-width: 800px;
+    }
+
+    /*亭新增*/
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* 購物車結帳按鈕樣式調整 */
+    .btn-success {
+        background-color: #DCBF85;
+        color: #03254E;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+        /* 當滑鼠移到按鈕上時的效果 */
+        .btn-success:hover {
+            background-color: #D5C67A;
+            color: #4B1939;
+        }
+
+        /* 當按鈕被點擊時的效果 */
+        .btn-success:active {
+            background-color: #45a245;
+        }
+
+    td input[type="button"] {
+        text-align: center;
+    }
+
+
+    .KeepShopping:hover > a {
+        font-size: 20px;
+        font-weight: bold;
+        /*color: #788BFF;*/
+        color: #EF476F;
+        text-align: center;
+    }
+
+
+
+    .GoCheckout:hover > span {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff6700;
+        text-align: center;
+    }
+
+    span {
+        font-style: normal;
+        font-weight: bold;
+    }
+
+    /* 標題文字樣式 */
+    h4 {
+        text-align: center;
+        font-size: 26px;
+        font-weight: bold;
+        color: #4C4C47;
+    }
+
+</style>
+
+
+<div class="cart-style">
+    <h4>購物車</h4>
+    <hr />
+    @*    <div class="alert alert-success" role="alert">刪除成功</div>*@
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="checkall" name="checkall" value="Bike" onclick="check_all(this,'c')">
+                    <label for="checkall">全選</label>
+                </th>
+                <th>商品圖片</th>
+                <th>商品名稱</th>
+                <th>商品價格</th>
+                <th>商品數量</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="@item.Product?.ProductId" value="@item.Product?.ProductId">
+                        <input value="@item.Product?.ProductId" hidden>
+                    </td>
+                    <td>
+                        <img class="productimg" src="~/assets/images/@item.Product?.ProductImg">
+                    </td>
+                    <td>
+                        <div class="td_txt">
+                            @item.Product?.ProductName
+                        </div>
+                    </td>
+                    <td>
+                        <div class="td_txt">
+                            @item.Product?.ProductPrice
+                        </div>
+                    </td>
+                    <td>
+                        <div class="td_txt">
+                            <ul class="counter" onclick="counterClick(this)">
+                                <li><input type="button" onclick="changeAction(this)" value="-" /></li>
+                                <li id="countnum">@item.Cart?.CartProductQuantity</li>
+                                <li><input type="button" onclick="changeAction(this)" value="+" /></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <button onclick="deleteCart(this.value)" value="@item.Cart?.ProductId" class="btn">刪除</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+            @{
+                // 檢查是否有訂購成功的參數
+                bool orderSuccess = ViewBag.orderSuccess ?? false;
+            }
+
+            @if (orderSuccess)
+            {
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    商品已加入購物車！
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        </tbody>
+    </table>
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        @* <!-- 左侧按钮，继续购物 -->
+        <button class="btn-continue-shopping">繼續購物</button>
+
+        <!-- 右侧按钮，去结账 -->
+        <button class="btn-success" onclick="checkout()">結帳去</button>
+
+        *@
+        <div class="KeepShopping">
+            <a asp-action="List" asp-controller="Product">
+                <img src="~/assets/images/cart.png" style="width:50px; height:50px" />
+                <span style="font-style: normal;">繼續購物</span>
+            </a>
+        </div>
+
+        <div class="GoCheckout" onclick="checkout()">
+            <img src="~/assets/images/checkout.jpg" style="width:50px; height:50px" />
+            <span style="font-style: normal;">結帳去</span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+
+        //刪除購物車內商品
+        const baseAddress = "https://localhost:5000"
+
+        function deleteCart(productId) {
+            $.ajax({
+                type: "GET",
+                url: `${baseAddress}/api/CartsAPI/Delete/${productId}`
+            }).done(data => {
+                window.location.reload();
+            }).fail(err => {
+                alert(err.statusText);
+            });
+        };
+
+        // 全選框的 change 事件處理函式
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            const checkall = document.getElementById('checkall');
+
+            // 將所有商品選取框的勾選狀態設置成全選框的勾選狀態
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkall.checked;
+            }
+        }
+
+        // 監聽全選框的 change 事件
+        document.getElementById('checkall').addEventListener('change', selectAll);
+
+        let action = '';
+
+        //商品數量增減事件
+        function counterClick(el) {
+            console.log(el.childNodes);
+            if (action == '+') adder(el.childNodes[3]);
+            if (action == '-') minuser(el.childNodes[3]);
+        }
+
+        function changeAction(el) {
+            action = el.value;
+        }
+
+        function adder(el) {
+            el.innerHTML = parseInt(el.innerHTML) + 1;
+        }
+
+        function minuser(el) {
+            if (el.innerHTML <= 1) return;
+            el.innerHTML = parseInt(el.innerHTML) - 1;
+        }
+
+        //選擇商品並結帳
+        function checkout() {
+            const checkboxes = document.querySelectorAll('tbody tr');
+            console.log(checkboxes);
+            const trueCheckboxs = [];
+
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].childNodes[1].childNodes[1].checked) {
+                    trueCheckboxs.push({
+                        pid: parseInt(checkboxes[i].children[0].children[1].value),
+                        qty: parseInt(checkboxes[i].children[4].children[0].innerText)
+                    });
+                };
+            }
+            console.log(JSON.stringify({ trueCheckboxs }));
+            $.ajax({
+                type: "POST",
+                url: `${baseAddress}/api/CartsAPI/SaveCartSession`,
+                data: JSON.stringify({ trueCheckboxs }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (response) {
+                    window.location.replace(response)
+                },
+                error: function (xhr, status, error) {
+                    //alert(error);
+                }
+            });
+
+        }
+
+    </script>
+}

@@ -1,0 +1,64 @@
+﻿@model List<ChilLaxFrontEnd.Models.CShoppingCartItem>
+@{
+    ViewData["Title"] = "檢視購物車";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            序
+        </th>
+
+        <th>
+            購買品項
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].小計)
+        </th>
+        <th></th>
+    </tr>
+
+    @{
+        int count = 0;
+        decimal pay = 0;
+        decimal sum = 0;
+        foreach (var item in Model)
+        {
+            count++;
+            pay += item.小計;
+
+            <tr>
+                <td>
+                    @count
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.小計)
+                </td>
+                <td>
+                    @Html.ActionLink("改數量", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("取消", "Edit", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+        sum = pay;
+    }
+</table>
+
+<li>交易金額：@pay.ToString("###,###,##0")</li>
+<li>應付金額：@sum.ToString("###,###,##0")</li>

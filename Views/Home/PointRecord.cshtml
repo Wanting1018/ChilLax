@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "點數紀錄";
+}
+
+
+@section Styles
+    {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            caret-color: transparent;
+        }
+
+        th, td {
+            font-size: 1.3rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+<div id="app" style="margin-top: 50px">
+    <div class="container" v-cloak>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="dropdown">
+                    <span>交易來源</span>&nbsp&nbsp
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="border-radius: 10px">
+                        {{ selectedOption }}
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('All')">All</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Focus')">Focus</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Tarot')">Tarot</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" v-on:click="updateSelected('Product')">Product</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12">
+                <span>交易起始日</span>&nbsp
+                <input type="date" name="start" v-model="startDate" style="border-radius: 10px; padding: 5px" /> ~
+                <span>交易終止日</span>&nbsp
+                <input type="date" name="end" v-model="endDate" style="border-radius: 10px; padding: 5px" />
+            </div>
+
+            <table class="table table-hover" style="margin-top: 30px">
+                <thead>
+                    <tr>
+                        <th>交易來源</th>
+                        <th>交易內容</th>
+                        <th>異動數量 <i :class="{'bi':true, 'bi-sort-up': sortTypeA==='asc', 'bi-sort-down':sortTypeA !== 'asc'}" @@click="sortHandler('modifiedAmount')"></i></th>
+                        <th>交易時間 <i :class="{'bi':true, 'bi-sort-up': sortTypeT==='asc', 'bi-sort-down':sortTypeT !== 'asc'}" @@click="sortHandler('modifiedTime')"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="{modifiedSource, content, modifiedAmount, modifiedTime} in pointRecords" :style="getRowStyle(modifiedSource)">
+                        <td>{{modifiedSource}}</td>
+                        <td>{{content}}</td>
+                        <td>{{modifiedAmount}}</td>
+                        <td>{{modifiedTime}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation" style="text-align: center">
+                <ul class="pagination">
+                    <li class="page-item" v-for="page in totalPages"><a class="page-link" href="#" @@click="pagingHandler(page)">{{ page }}</a></li>
+                </ul>
+            </nav>
+            @*  {{pointRecords}}*@
+        </div>
+    </div>
+</div>
+
+
+    @section Scripts{
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script>
+            const { createApp, ref, watch } = Vue
+            createApp({
+                setup() {
+                    const pointRecords = ref([]) // 點數紀錄
+                    const selectedOption = ref("") // 下拉選單所選的內容
+                    const startDate = ref("") // 交易起始日的值
+                    const endDate = ref("") // 交易終止日的值
+                    const sortBy = ref("")       // 排序的欄位
+                    const sortTypeA = ref("asc")  // modifiedAmount是升冪還是降冪
+                    const sortTypeT = ref("asc")  // modifiedTime是升冪還是降冪
+                    const totalPages = ref()   // 總共有幾頁
+                    const thePage = ref(1)       // 目前是第幾頁
+
+                    const loadPointRecords = async () => {
+                        let API_URL = ''
+                        if (sortBy.value == "modifiedAmount") {
+                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeA.value}&page=${thePage.value}`
+                        }
+                        else {
+                            API_URL = `https://localhost:5000/api/PointHistories?keyword=${selectedOption.value}&startDate=${startDate.value}&endDate=${endDate.value}&sortBy=${sortBy.value}&sortType=${sortTypeT.value}&page=${thePage.value}`
+
+                        }
+                        const response = await fetch(API_URL, {
+                            method: "POST",
+                        })
+                        const datas = await response.json()
+                        pointRecords.value = datas.pointRecords
+                        totalPages.value = datas.totalPages
+                    }
+                    loadPointRecords()
+
+
+                    // 下拉選單功能---------------------------------------------------------------------------------------------
+                    // 按下選項就觸發方法
+                    const updateSelected = (option) => {
+                        selectedOption.value = option
+                        console.log(option)
+                    }
+
+                    // 監看交易來源有沒有改變
+                    watch(selectedOption, () => {
+                        loadPointRecords()
+                    })
+
+                    // 日期區段功能---------------------------------------------------------------------------------------------
+                    // 監看起始日有沒有改變
+                    watch(startDate, (newValue) => {
+                        console.log(newValue)
+                        loadPointRecords()
+                    })
+                    // 監看終止日有沒有改變
+                    watch(endDate, (newValue) => {
+                        console.log(newValue)
+                        loadPointRecords()
+                    })
+
+                    // 排序功能---------------------------------------------------------------------------------------------
+                    // 按下異動數量欄位的排序icon就觸發方法
+                    const sortHandler = type => {
+                        sortBy.value = type
+                        if (type == "modifiedAmount") {
+                            sortTypeA.value = sortTypeA.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                        }
+                        else {
+                            sortTypeT.value = sortTypeT.value === "asc" ? "desc" : "asc" //升冪還是降冪的切換
+                        }
+
+                        console.log(sortBy.value, sortTypeA.value, sortTypeT.value)
+                        //thePage.value = 1
+                        loadPointRecords()
+                    }
+
+                    // 列的顏色 (根據modifiedSource而定)---------------------------------------------------------------------------------------------
+                    const getRowStyle = modifiedSource => {
+                        console.log(modifiedSource);
+                        // 如果 modifiedSource 是 "focus"
+                        if (modifiedSource === "focus") {
+                            return { backgroundColor: "#DFFFFF" };
+                        }
+                        // 如果 modifiedSource 是 "tarot"
+                        if (modifiedSource === "tarot") {
+                            return { backgroundColor: "#D1FFDF" };
+                        }
+                        // 如果 modifiedSource 是 "product"
+                        if (modifiedSource === "product") {
+                            return { backgroundColor: "#FEFFDF" };
+                        }
+                        // 預設情況下，不應用任何額外的 CSS 類，保持預設的背景色
+                        return {};
+                    };
+
+                    //分頁功能---------------------------------------------------------------------------------------------
+                    const pagingHandler = page => {
+                        thePage.value = page
+                        loadPointRecords()
+                    }
+
+                    return {
+                        pointRecords,
+                        updateSelected,
+                        selectedOption,
+                        startDate,
+                        endDate,
+                        sortHandler,
+                        sortTypeA,
+                        sortTypeT,
+                        sortBy,
+                        getRowStyle,
+                        totalPages,
+                        pagingHandler,
+                        thePage
+                    }
+                }
+            }).mount('#app')
+        </script>
+    }

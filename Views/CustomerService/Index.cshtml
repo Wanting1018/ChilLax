@@ -1,0 +1,127 @@
+﻿@section Styles
+    {
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        thead {
+            background-color: #4A4AFF;
+            color: white;
+        }
+
+        #feedbackInput {
+            width: 800px; 
+            margin: 50px 50px 50px; 
+        }
+    </style>
+}
+<div>
+    <section>
+        <div class="titan-caption">
+            <div class="caption-content">
+                <div class="font-alt mb-40 titan-title-size-4">We are ChilLax</div>
+                <div class="font-alt mb-30 titan-title-size-1">我們非常注重每一位Chillaxer的意見，請您有任何問題都歡迎留言告訴我們。</div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div class="container">
+    <table id="customerServiceTable" class="display">
+    <thead>
+        <tr>
+
+            <th>回饋時間</th>
+            <th>回饋訊息</th>
+            <th>客服回覆訊息</th>
+            <th>客服回覆時間</th>
+        </tr>
+    </thead>
+</table>
+
+<table id="customerServiceTable" class="display ">
+
+
+
+    <tbody>
+
+        <tr>
+            <td>
+
+                <input type="text" id="feedbackInput" placeholder="在此輸入您的訊息" />
+            </td>
+            <td>
+
+                <button onclick="postFeedback()" class="btn btn-success">提交留言</button>
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+
+
+
+@section Scripts
+    {
+    @*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
+    <script>
+        function postFeedback() {
+            var feedbackMessage = document.getElementById("feedbackInput").value;
+            if (feedbackMessage.trim() === '') {
+                alert("還請輸入您的意見");
+                return; // 阻止提交回饋
+            }
+            var cusDTO = {
+                message: feedbackMessage
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Content("~/api/CustomerServicesApi")",
+                //url: "/api/CustomerServicesApi",
+                data: JSON.stringify(cusDTO),
+                contentType: "application/json"
+            }).done(data => {
+                alert("回饋已成功提交！");
+                document.getElementById("feedbackInput").value = '';
+                var table = $("#customerServiceTable").DataTable();
+                table.ajax.reload();
+            }).fail(err => {
+                alert("提交回饋時發生錯誤: " + err.statusText);
+            });
+        }
+        
+        $(document).ready(function () {
+            $("#feedbackInput").keypress(function (event) {
+                if (event.which === 13) { // 13 代表Enter鍵
+                    postFeedback(); // 提交回饋
+                }
+            });
+            var table = $("#customerServiceTable").DataTable({
+                ajax: {
+                    type: "GET",
+                    url: "@Url.Content("~/api/CustomerServicesApi")",
+                    //url: "/api/CustomerServicesApi",
+                    dataSrc: function (data) { return data; }
+                },
+                columns: [
+                    
+                    { "data": "messageDatetime", "width": "25%" },
+                    { "data": "message", "width": "25%" },
+                    { "data": "reply", "width": "25%" },
+                    { "data": "replyDatetime", "width": "25%" },
+                ],
+                fixedHeader: {
+                    header: true
+                },
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.5/i18n/zh-HANT.json',
+                },
+                order: [[0, 'desc']]
+            });
+
+            
+
+        });
+    </script>
+}

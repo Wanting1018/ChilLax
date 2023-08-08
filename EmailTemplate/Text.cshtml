@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div style="text-align:center;background-color:orange;font-size:45px;">
+        <p>發送email的內容</p>
+    </div>
+    <div>
+        <p>
+            HI!<span>@@ViewBag.UserName</span>
+            請按下方的連結文字，即完成驗證!
+            @*<a href="@ViewBag.ConfirmationLink">Here</a>*@
+            <a onclick="verifyEmail()">請點選</a>
+
+        </p>
+    </div>
+</body>
+</html>
+<script>
+    function verifyEmail() {
+        
+        alert("驗證成功");
+
+        window.location.href = '@Url.Action("Login", "LoginController")'; 
+        //window.location.href = "https://localhost:7189/Login/Login";
+    }
+</script>

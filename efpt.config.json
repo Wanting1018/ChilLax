@@ -1,0 +1,107 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "ChilLaxContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "ChilLaxFrontEnd",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Announcement]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Cart]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerService]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Employee]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FocusDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FocusSlide]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Member]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberCredential]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PointHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Product]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductOrder]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Purchase]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PurchaseDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Supplier]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TarotCard]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TarotOrder]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "chillax.ChilLax.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

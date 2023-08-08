@@ -1,0 +1,146 @@
+﻿    @model ChilLaxFrontEnd.Models.Product
+
+@{
+    ViewData["Title"] = "商品詳細介紹";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="~/assets/css/product_css/product_index2.css" rel="stylesheet" />
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700"
+          rel="stylesheet" />
+
+    <!-- java script -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" />
+
+    <!-- Bootstrap -->
+    <link href="~/assets/css/product_css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.rtl.min.css" integrity="sha384-beJoAY4VI2Q+5IPXjI207/ntOuaz06QYCdpWfWRv4lSFDyUSqsM0W+wiAMr2I185" crossorigin="anonymous"> -->
+    <!-- Slick -->
+    <link href="~/assets/css/product_css/slick.css" rel="stylesheet" />
+    <link href="~/assets/css/product_css/slick-theme.css" rel="stylesheet" />
+
+    <!-- nouislider -->
+    <link href="~/assets/css/product_css/nouislider.min.css" rel="stylesheet" />
+
+
+
+    <!-- Custom stlylesheet -->
+    <link href="~/assets/css/product_css/style.css" rel="stylesheet" />
+}
+
+<div class="container">
+
+    @using (Html.BeginForm("AddToCart", "Product", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        <input type="hidden" name="ProductId" value="@Model.ProductId" id="PId" />
+
+
+        @* <!-- SECTION --> *@
+        <div class="section">
+            @* <!-- container --> *@
+            @* <!-- row --> *@
+            <div class="row">
+                @* <!-- Product thumb imgs --> *@
+                <div class="col-md-7">
+                    <div id="product-imgs" >
+                        <div class="product-preview">
+                            <img src="~/assets/images/@Model.ProductImg" />
+                        </div>
+                    </div>
+                </div>
+                @*  <!-- /Product thumb imgs --> *@
+
+                @*  <!-- Product details --> *@
+                <div class="col-md-5">
+                    <div style="height:100px"></div>
+                    <div class="product-details">
+                        <h2 class="product-name"> @Model.ProductName</h2>
+                        <div>
+                            <h3 class="product-price">$ @Model.ProductPrice 元</h3>
+                        </div>
+
+                        <div class="add-to-cart">
+                            <div style="font-size: 16px; font-weight: bold" class="qty-label">
+                                數量
+                                <input type="number" name="txtCount" value="1" min="1" style="width:150px ; height:30px; margin-left: 20px" />
+                            </div>
+
+                            <div class="button-container">
+                                <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add To Cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @* 	<!-- /Product details --> *@
+
+                
+
+            </div>
+            @*  <!-- /row --> *@
+            @*  <!-- Product tab --> *@
+            <div class="col-md-12">
+                <div id="product-tab">
+                    @*   <!-- product tab nav --> *@
+                    <ul class="tab-nav">
+                        <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+                    </ul>
+                    @*   <!-- /product tab nav --> *@
+
+                    @*   <!-- product tab content --> *@
+                    <div class="tab-content">
+                        @*    <!-- tab1  --> *@
+                        <div id="tab1" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p> @Model.ProductDesc </p>
+                                </div>
+                            </div>
+                        </div>
+                        @*   <!-- /tab1  --> *@
+                    </div>
+                    @*   <!-- /product tab content --> *@
+                </div>
+                @*   <!-- /product tab --> *@
+            </div>
+        </div>
+        @* <!-- /SECTION --> *@
+
+        @*  <!-- /container --> *@
+
+        <div style="margin-bottom: 1000px;" class="PageBottom">
+            @Html.ActionLink("返回上一頁", "List")
+        </div>
+    }
+
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                // 選擇增減按鈕和數量輸入框元素
+                var qtyUp = $(".qty-up");
+                var qtyDown = $(".qty-down");
+                var quantityInput = $(".input-number");
+
+                // 設置增加數量的事件
+                qtyUp.click(function () {
+                    var currentValue = parseInt(quantityInput.val());
+                    quantityInput.val(currentValue + 1);
+                });
+
+                // 設置減少數量的事件
+                qtyDown.click(function () {
+                    var currentValue = parseInt(quantityInput.val());
+                    if (currentValue > 1) {
+                        quantityInput.val(currentValue - 1);
+                    }
+                });
+            });
+        </script>
+    }
+

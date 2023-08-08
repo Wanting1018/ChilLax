@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "poppins", sans-serif;
+    }
+
+    .row {
+        background-color: #d2dcd2;
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+        /* filter: blur(2px); */
+    }
+
+    .box {
+        position: absolute;
+        left: 50%;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        height: 450px;
+        border: 1px solid white;
+        background-color: white;
+        background-position: center;
+        background-size: cover;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    p {
+        text-align: center;
+    }
+
+    img {
+        width: 75px;
+        margin: 25px 215px;
+    }
+</style>
+<title>驗證信箱</title>
+<div class="row"></div>
+<div class="container">
+    <div class="box">
+        <img src="~/images/積木.gif" />
+        <p>驗證信箱成功，請重新登入。</p>
+        <br />
+        <p>10秒後自動跳回登入頁面或直接點擊此<a href="https://localhost:5000/Login/Login">連結</a>回登入頁面</p>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        window.location.href = "https://localhost:5000/Login/Login";
+        //window.close();
+    }, 10000);
+</script>

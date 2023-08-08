@@ -1,0 +1,284 @@
+﻿@{
+	Layout = null;
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: "poppins",sans-serif;
+	}
+
+	.background {
+		/* 最下層背景 */
+		background: url('@Url.Content("~/images/login.jpg")');
+		/* background-color: #98979783; */
+		background-position: center;
+		background-size: cover;
+		height: 100vh;
+		width: 100%;
+		filter: blur(2px);
+	}
+
+	.main {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		width: 75%;
+		height: 700px;
+		background: url('@Url.Content("~/images/login.jpg")');
+		background-position: center;
+		background-size: cover;
+		border-radius: 20px;
+		overflow: hidden;
+	}
+
+
+/*中間白色透明背景*/
+.main .verify-section {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%,0);
+	/* margin:0 auto; */
+	/* width: calc(100% - 58%); */
+	width: 500px;
+	height: 100%;
+	color: #fff;
+	background-color: rgba(88, 85, 85, 0.2);
+	/* backdrop-filter: blur(4px); */
+}
+
+.verify-section .form-box {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+.verify-section .form-box h2 {
+    text-align: center;
+    font-size: 30px;
+    margin: 20px 0 5px 0;
+}
+
+
+.verify-section .form-box h5 {
+    text-align: center;
+    font-size: 16px;
+}
+.verify-section .form-box h5{
+    color:#d9d9d9;
+    margin: 50px auto;
+    background-color: rgba(0,0,0,0.3);
+    width: 150px;
+}
+.verify-section .form-box p{
+    font-size: 14px;
+    text-align: center;
+    margin: 0 40px 30px 40px;
+}
+.form-box .input-box{
+    width: 340px;
+    height: 50px;
+    border-bottom: 2px solid#fff;
+    margin: 30px 0;
+    position: relative;
+}
+.input-box input{
+	height: 100%;
+	color: #fff;
+	background: transparent;
+	border: none;
+	outline: none;
+	font-size: 18px;
+	position: absolute;
+	top: 50%;
+	/* left: 0; */
+	transform: translateY(-40%);
+	width: 275px;
+	padding-left: 10px;
+	text-transform: none;
+}
+
+.input-box label{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: 600px;
+    pointer-events: none;
+    transition: .5s ease;
+}
+
+	.input-box .icon i {
+		position: absolute;
+		top: 13px;
+		right: 0;
+		font-size: 19px;
+	}
+
+	.input-box i {
+		font-size: 19px;
+		color: white;
+		margin-right: 5px;
+	}
+
+
+	.pwdVisibility {
+	color: white;
+	font-size: 16px;
+	background-color: transparent;
+	border: none;
+	margin-right: 12px;
+	cursor: pointer;
+	}
+/*文字向上漂浮*/
+.input-box input:focus~ label,
+.input-box input:valid ~ label
+{
+    top: -5px;
+}
+
+.resendBtn{
+    width: 150px;
+    height: 35px;
+    margin-top: 40px;
+    left: 50%;
+    transform: translate(-50%,0);
+    position: relative;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background:#4F9D9D	;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: rgba(0,0,0,0.4);
+	font-weight: bolder;
+}
+.resendBtn:hover{
+	background: transparent;
+	border: 1px solid #4f9d9d;
+	border-radius: 2px;
+	color: #4f9d9d;
+}
+
+</style>
+
+<title>重設密碼</title>
+<div class="background"></div>
+<article>
+	<div class="main container">
+		<div class="row verify-section">
+			<div class="form-box col-md-12">
+				<form id="ResetPwd">
+					<h2>重設密碼</h2>
+					<!-- <h5>請查看email信件</h5> -->
+					<div class="input-box">
+						<span class="icon">
+							<button type="button" class="pwdVisibility" id="togglePwd" onclick="togglePasswordVisibility('memberPwd', 'togglePwd')">
+								<i class="bi bi-eye"></i>
+							</button>
+						</span>
+						<input type="password" id="memberPwd" name="memberPassword" autocomplete="off" required />
+						<label><i class="bi bi-lock-fill"></i>密碼</label>
+					</div>
+					<div class="input-box">
+						<span class="icon">
+							<button type="button" class="pwdVisibility" id="toggleChkPwd" onclick="togglePasswordVisibility('memberChkPwd', 'toggleChkPwd')">
+								<i class="bi bi-eye"></i>
+							</button>
+						</span>
+						<input type="password" id="memberChkPwd" name="memberConfirmPassword" autocomplete="off" required />
+						<label><i class="bi bi-lock-fill"></i>確認密碼</label>
+					</div>
+					<button class="resendBtn" type="submit">送出</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</article>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<script>
+	function togglePasswordVisibility(inputId, toggleButtonId) {
+		console.log("togglePasswordVisibility");
+
+		var passwordInput = document.getElementById(inputId);
+		var toggleButton = document.getElementById(toggleButtonId);
+
+		if (passwordInput.type === "password") {
+			passwordInput.type = "text";
+			toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+		} else {
+			passwordInput.type = "password";
+			toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+		}
+	}
+
+
+
+
+	document.getElementById("ResetPwd").addEventListener("submit", function (event) {
+		event.preventDefault();
+
+		let memberPassword = document.getElementById("memberPwd").value;
+		let memberConfirmPassword = document.getElementById("memberChkPwd").value;
+
+
+		if ((memberPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+			alert("請輸入新密碼和確認密碼!");
+			return false;
+		}
+		let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+		if (!passwordPattern.test(memberPassword)) {
+			alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
+			return false;
+		}
+
+		if (memberConfirmPassword !== memberPassword) {
+			alert("請確認密碼是否相同!")
+			return false;
+		}
+
+
+		const formData =
+		{
+			memberAccount: "",
+			memberPassword: memberPassword
+		}
+
+		console.log(JSON.stringify(formData));
+
+		$.ajax({
+			type: "POST",
+			url: "/api/Members/ResetPwd",
+			data: JSON.stringify(formData),
+			contentType: "application/json"
+		}).done(data => {
+			if (!data.success) {
+				alert(data.message);
+				return false;
+			}
+			alert(data.message);
+			window.location.href = "https://localhost:5000/Login/Login";
+
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			if (jqXHR.status === 400) {
+				const errorResponse = jqXHR.responseJSON;
+				alert(errorResponse.message);
+			} else {
+				console.error("AJAX error:", textStatus, errorThrown);
+			}
+		});
+		return false;
+	});
+</script>

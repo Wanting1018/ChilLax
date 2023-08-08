@@ -1,0 +1,239 @@
+﻿@using System.Text.Json;
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "poppins",sans-serif;
+    }
+
+    .background {
+        /* 最下層背景 */
+        background: url(../images/login.jpg) no-repeat;
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+        filter: blur(2px);
+    }
+
+
+    .main {
+        position: absolute;
+        left: 50%;
+        top: 53%;
+        transform: translate(-50%,-50%);
+        width: 75%;
+        height: 700px;
+        background: url(../images/login.jpg) no-repeat;
+        background-position: center;
+        background-size: cover;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+
+        /*中間白色透明背景*/
+        .main .verify-section {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%,0);
+            /* margin:0 auto; */
+            /* width: calc(100% - 58%); */
+            width: 500px;
+            height: 100%;
+            color: #fff;
+            background-color: rgba(88, 85, 85, 0.2);
+            /* backdrop-filter: blur(4px); */
+        }
+
+    .verify-section .form-box {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+
+
+
+        .verify-section .form-box h2 {
+            text-align: center;
+            font-size: 30px;
+            margin: 20px 0 5px 0;
+        }
+
+
+        .verify-section .form-box h5 {
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .verify-section .form-box h5 {
+            color: #d9d9d9;
+            margin: 50px auto;
+            background-color: rgba(0,0,0,0.3);
+            width: 150px;
+        }
+
+        .verify-section .form-box p {
+            font-size: 14px;
+            text-align: center;
+            margin: 0 40px 30px 40px;
+        }
+
+    .form-verify {
+        width: 300px;
+        /* height: 30px; */
+        left: 65%;
+        transform: translate(-65%,0);
+        position: relative;
+        margin: 30px 0;
+    }
+
+        .form-verify input {
+            padding: 5px 0 5px 36px;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        .form-verify i {
+            color: #222222;
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+        }
+
+    .resendBtn.clicked {
+        background-color: #D1E9E9; /* 更改按鈕的背景顏色 */
+        color: #4F9D9D; /* 更改按鈕的文字顏色 */
+        border: 2px solid #4F9D9D;
+        border-radius: 4px;
+        cursor: default;
+    }
+
+    .resendBtn {
+        width: 150px;
+        height: 40px;
+        margin-top: 40px;
+        left: 50%;
+        transform: translate(-50%,0);
+        position: relative;
+        outline: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: #4F9D9D;
+        font-size: 16px;
+        color: #fff;
+        box-shadow: rgba(0,0,0,0.4);
+        padding: 3px;
+        font-weight: bolder;
+    }
+
+        .resendBtn:hover {
+            background: transparent;
+            border: 1px solid #4f9d9d;
+            border-radius: 2px;
+            color: #4f9d9d;
+        }
+
+    .hidden {
+        visibility: hidden;
+    }
+
+</style>
+<title>驗證信箱</title>
+@model ChilLaxFrontEnd.ViewModels.VerifyEmailViewModel
+
+<div class="background"></div>
+<article>
+    <div class="main container">
+        <div class="row verify-section">
+            <div class="form-box col-md-12">
+                <div class="form">
+                    <h2>驗證信箱</h2>
+                    <h5>請查看email信件</h5>
+                    <p class="col-sm-8">為了確保為您本人，我們已寄送一封驗證信至您的信箱，請點擊內容的驗證連結以開通帳號</p>
+                    @Html.TextBoxFor(model => model.MemberId, new { @class = "hidden",id = "memberId" })
+                    <div>
+                        <div class="form-verify">
+                            <i class="fa-solid fa-envelope"></i>
+                            @*<input type="email" id="email" name="user_email" class="user_input"  readonly>*@
+                            @Html.TextBox("MemberEmail", Model.MemberEmail, new { type = "email",name="MemberEmail", @class = "user_input", id = "email", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <button class="resendBtn" id="resendButton" onclick="startCountdown(60)">重發發送驗證信</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<script>
+    function startCountdown(seconds) {
+        SaveForm();
+        let button = document.getElementById("resendButton");
+        button.disabled = true;
+        button.classList.add("clicked");
+        button.innerHTML = seconds + ' 秒後可再次發送';
+
+        function countdown() {
+            seconds--;
+
+            if (seconds <= 0) {
+                resetButton();
+                SaveForm(); // 在倒數計時結束後，調用 SaveForm 函數
+            } else {
+                button.innerHTML = seconds + ' 秒後可再次發送';
+                setTimeout(countdown, 1000);
+            }
+        }
+
+        setTimeout(countdown, 1000);
+    }
+
+    function resetButton() {
+        let button = document.getElementById("resendButton");
+        button.innerHTML = '重發送驗證信';
+        button.disabled = false;
+        button.classList.remove("clicked");
+    }
+
+    function SaveForm() {
+        console.log('SaveForm');
+
+        let memberId = document.getElementById("memberId").value;
+        let memberEmail = document.getElementById("email").value;
+
+        const memberData = {
+            memberId: memberId,
+            memberEmail: memberEmail
+        };
+        console.log(JSON.stringify(memberData));
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/Members/${memberId}`,
+            data: JSON.stringify(memberData),
+            contentType: "application/json"
+        }).done(data => {
+            alert(data);
+        }).fail(err => {
+            alert("ajax呼叫失敗：" + err.responseText);
+            console.log(err.responseText);
+        });
+    }
+</script>

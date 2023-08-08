@@ -1,0 +1,832 @@
+﻿@using ChilLaxFrontEnd.ViewModels;
+@using System.Text.Json;
+@model IEnumerable<ChilLaxFrontEnd.Models.FocusSlide>
+
+@{
+    ViewData["Title"] = "情境專注";
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<style>
+    body {
+        margin: 0;
+        font-family: Helvetica, sans-serif;
+        background: #000;
+        user-select: none;
+        caret-color: transparent;
+    }
+
+    /*情境式圖片容器*/
+    .image-slider {
+        margin-bottom: -50px;
+    }
+
+    /*沙漏動態圖示*/
+    .hourglassBox {
+        z-index: 1000;
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+
+    /*專注時間設定容器*/
+    .timeSetter {
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 6px double #E0E0E0;
+        padding: 15px 30px;
+        border-radius: 10px;
+        position: absolute;
+        width: 25%;
+        top: 17%;
+        left: 50%;
+        transform: translate(-50%, 50%);
+    }
+
+    /* 在寬度小於768時，將容器的寬度變為60% */
+    @@media (max-width: 768px) {
+        .timeSetter {
+            width: 75%;
+        }
+    }
+
+    .timeSetter h3 {
+        color: white;
+        font-weight: 500;
+    }
+
+    /*專注時間設定下拉式選單*/
+    #timeSelect {
+        width: 120px;
+        height: 30px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    /*專注時間設定按鈕*/
+    .timeBtn {
+        padding: 0.6em 2em;
+        border: none;
+        outline: none;
+        color: rgb(255, 255, 255);
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        font-size: 1.5rem;
+    }
+
+        .timeBtn:before {
+            content: "";
+            background: linear-gradient( 45deg, #00ffd5, #002bff);
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            animation: glowing-timeBtn 20s linear infinite;
+            transition: opacity 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+
+    @@keyframes glowing-timeBtn {
+        0% {
+            background-position: 0 0;
+        }
+
+        50% {
+            background-position: 400% 0;
+        }
+
+        100% {
+            background-position: 0 0;
+        }
+    }
+
+    .timeBtn:after {
+        z-index: -1;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #222;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+    }
+
+    /*情境字幕容器*/
+    .titleBox {
+        display: none;
+        position: absolute;
+        bottom: 70px;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+
+    /*情境字幕*/
+    .animate-charcter {
+        text-transform: capitalize;
+        background-image: linear-gradient(-225deg, #08AEEA 0%, #2AF598 100%);
+        background-size: auto auto;
+        background-clip: border-box;
+        background-size: 200% auto;
+        color: #fff;
+        background-clip: text;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textclip 2s linear infinite;
+        display: inline-block;
+        font-size: 30px;
+    }
+
+    /*情境字幕動畫*/
+    @@keyframes textclip {
+        to {
+            background-position: 200% center;
+        }
+    }
+
+    /*情境圖片*/
+    .slide {
+        width: 100%;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    /*左右切換鍵*/
+    .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 100;
+        background: rgba(0, 0, 0, .1);
+        border-radius: 50%;
+        transform: background 500ms;
+    }
+
+        .arrow img {
+            width: 50px;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, .4);
+        }
+
+    .l {
+        left: 0;
+    }
+
+    .r {
+        right: 0;
+    }
+
+    /*背景遮罩*/
+    .mask {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        position: fixed;
+        z-index: 999;
+        background: rgba(0,0,0,0.2);
+    }
+
+    /* html 標籤要用的樣式 ，跟窗口一樣大，內容超出隱藏，避免出現滾動條 */
+    .htmlMask {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /*圓形時間進度條*/
+    #progressCanvas {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 70px;
+    }
+
+    /*點數錢幣*/
+    .coin {
+        position: absolute;
+        visibility: hidden;
+        z-index: 1000;
+        top: 5%;
+        right: 12%;
+        width: 50px;
+        height: 50px;
+        background-image: url('/assets/images/dollar64.png'); /* 替換成硬幣的圖片 */
+        background-size: cover;
+        border-radius: 50%;
+        animation: rotateCoin 3s infinite linear, sparkle 1s infinite;
+    }
+
+        .coin span {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1E2749;
+        }
+
+    @@keyframes rotateCoin {
+        0% {
+            transform: rotateY(0deg);
+        }
+
+        100% {
+            transform: rotateY(360deg);
+        }
+    }
+
+    @@keyframes sparkle {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /*禮物*/
+    .gift {
+        visibility: hidden;
+        position: absolute;
+        cursor: pointer;
+        top: 100px;
+        right: 10%;
+        width: 80px;
+        height: 80px;
+        animation: shakeGift 1s infinite;
+    }
+
+    .shakeGift {
+        animation: shakeGift 1s infinite;
+    }
+
+    @@keyframes shakeGift {
+        0%, 100% {
+            transform: rotateZ(0deg);
+        }
+
+        20%, 80% {
+            transform: rotateZ(10deg);
+        }
+
+        40%, 60% {
+            transform: rotateZ(-10deg);
+        }
+    }
+    /*淡入*/
+    .fade-in-element {
+        animation: fadeIn 0.5s ease forwards;
+    }
+    /*淡出*/
+    .fade-out-element {
+        animation: fadeOut 0.5s ease forwards;
+    }
+
+    /* 淡出效果 */
+    @@keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5; /* 在50%時，將opacity設置為0.5 */
+        }
+
+        100% {
+            opacity: 0;
+            visibility: hidden; /* 或者使用 visibility: collapse; */
+        }
+    }
+
+    /* 淡入效果 */
+    @@keyframes fadeIn {
+        0% {
+            opacity: 0;
+            visibility: visible; /* 或者使用 visibility: initial; */
+        }
+
+        50% {
+            opacity: 0.5; /* 在50%時，將opacity設置為0.5 */
+        }
+
+        100% {
+            opacity: 1;
+            visibility: visible; /* 或者使用 visibility: initial; */
+        }
+    }
+</style>
+}
+
+<div class="bg-filter"
+     style="
+            z-index:50;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            pointer-events: none;
+          "></div>
+<section class="image-slider">
+
+    <div class="arrow l" onclick="prev()">
+        <img src="~/assets/images/l.png" alt="L" />
+    </div>
+    @{
+        foreach (var fs in Model)
+        {
+            string image_path = @"https://localhost:44385/assets/images/" + fs.ImagePath;
+            string audio_path = @"https://localhost:44385/assets/audios/" + fs.AudioPath;
+            <div class="slide" style="background-image: url(@image_path)">
+                <div class="titleBox">
+                    <h3 class="animate-charcter">@fs.Category</h3>
+                </div>
+            </div>
+            <audio class="sound" src="@audio_path" loop> </audio>
+        }
+    }
+
+    <div class="arrow r" onclick="next()">
+        <img src="~/assets/images/r.png" alt="R" />
+    </div>
+    <div class="hourglassBox">
+        <i id="hourglass" class="fa-solid fa-hourglass-half fa-beat-fade" style="color: #77e9e1; cursor: pointer; font-size: 5rem"></i>
+    </div>
+    <div class="timeSetter">
+        <h3>請選擇專注時間</h3>
+        <p style="margin-top: -5px; color: #E0E0E0; font-size: 12px">(50 points/ 10 minutes)</p>
+        <select id="timeSelect" name="focus-time">
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>40</option>
+            <option>50</option>
+            <option>60</option>
+        </select>
+        <br />
+        <button class="timeBtn" role="button">確定</button>
+    </div>
+    <canvas id="progressCanvas" width="150" height="150"></canvas>
+    <img class="gift" src="~/assets/images/gift.png" />
+    <div class="coin"><span></span></div>
+</section>
+
+@section Scripts
+    {
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        // 變數宣告---------------------------------------------------------------------------------------------
+        let slide = document.querySelectorAll('.slide');
+        let sound = document.querySelectorAll('.sound');
+        let hourglassBox = document.querySelector(".hourglassBox");
+        let timeSelect = document.querySelector("#timeSelect");
+        let timeBtn = document.querySelector(".timeBtn");
+        let timeSetter = document.querySelector(".timeSetter");
+        let titleBox = document.querySelectorAll(".titleBox");
+        let gift = document.querySelector(".gift");
+        let coin = document.querySelector(".coin");
+        let pointAdd = 0;
+        let current = 0;   // 當下情境圖片、字幕、音效的索引值
+        let focusTime = 0;
+        let fdid = null;
+        let fstart = null;
+        let fend = null;
+        let userInfo = null;
+
+        // 將JavaScript的時間轉換成SQL格式
+        function toSqlDateTime() {
+            let date = new Date();
+            // Get the timezone offset in minutes and convert to milliseconds
+            let timezoneOffsetMs = date.getTimezoneOffset() * 60 * 1000;
+            // Convert the UTC time to local time by adding the timezone offset
+            let localTime = new Date(date.getTime() - timezoneOffsetMs);
+            // Format the local time as a SQL-formatted datetime string
+            return localTime.toISOString().slice(0, 19);
+        }
+
+        // 產生 FocusDetailId 的值
+        function _uuid() {
+            var d = Date.now();
+            if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+                d += performance.now(); //use high-precision timer if available
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        }
+
+        // 情境畫面切換---------------------------------------------------------------------------------------------
+        //將所有情境圖片跟字幕設為隱藏
+        function cls() {
+            for (let i = 0; i < slide.length; i++) {
+                slide[i].style.display = 'none';
+                titleBox[i].style.display = "none";
+            }
+        }
+        //下一頁
+        function next() {
+            cls();
+            sound[current].pause();
+            if (current === slide.length - 1) current = -1;
+            current++;
+
+            sound[current].play();
+            slide[current].style.display = 'block';
+            slide[current].style.opacity = 0.4;
+            titleBox[current].style.display = "block";
+
+            var x = 0.4;
+            var intX = setInterval(function () {
+                x += 0.1;
+                slide[current].style.opacity = x;
+                if (x >= 1) {
+                    clearInterval(intX);
+                    x = 0.4;
+                }
+            }, 100);
+        }
+        //上一頁
+        function prev() {
+            cls();
+            sound[current].pause();
+            if (current === 0) current = slide.length;
+            current--;
+
+            sound[current].play();
+            slide[current].style.display = 'block';
+            slide[current].style.opacity = 0.4;
+            titleBox[current].style.display = "block";
+
+            var x = 0.4;
+            var intX = setInterval(function () {
+                x += 0.1;
+                slide[current].style.opacity = x;
+                if (x >= 1) {
+                    clearInterval(intX);
+                    x = 0.4;
+                }
+            }, 100);
+
+        }
+        // 背景遮罩---------------------------------------------------------------------------------------------
+        // 刪除 mask
+        let deleteMask = () => {
+            let mask;
+            // 如果 mask 存在，就刪除
+            if (mask = document.getElementById("mask")) {
+                // 刪除 mask 標籤
+                mask.parentNode.removeChild(mask);
+                // 去掉 <html> 標籤的特定樣式
+                document.documentElement.classList.remove("htmlMask");
+                start();
+            }
+        };
+        // 設定完專注時間所執行的工作
+        function start() {
+            // 開啟情境字幕、音效
+            titleBox[current].style.display = "block";
+            sound[current].play();
+            // 淡出沙漏圖示
+            hourglassBox.classList.remove('fade-in-element');
+            hourglassBox.classList.add('fade-out-element');
+            // 淡出時間設定方塊
+            timeSetter.classList.remove('fade-in-element');
+            timeSetter.classList.add('fade-out-element');
+            // 傳入專注時間並繪製計時器
+            focusTime = parseInt(timeSelect.value);
+            startCountup(focusTime);
+            // 專注id
+            fdid = _uuid();
+            // 能獲取到的點數
+            pointAdd = 5 * focusTime;
+            // 先將能獲取到的點數設定在金幣動畫
+            coin.querySelector('span').innerText = `+${pointAdd}`;
+            // 開始專注的時間
+            fstart = toSqlDateTime();
+        }
+        // 開啟 mask
+        let createMask = () => {
+            cls();
+            current = 0;
+            //只呈現第一頁情境圖片
+            slide[current].style.display = "block";
+            // 如果 mask 已經存在了，就不用再創建mask了
+            if (document.getElementById("mask")) {
+                return true;
+            }
+            let mask = document.createElement("div");
+            mask.id = "mask";
+            mask.className = "mask";
+            // 把 mask 添加到body 裏。
+            document.body.appendChild(mask);
+            // 控制 <html> 標籤的樣式
+            document.documentElement.classList.add("htmlMask")
+
+            // 取得 session 中的使用者資訊
+            fetch('/api/SessionData/SK_LOINGED_USER', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    userInfo = data;
+                    userInfo = Object.assign({}, data);
+                    //console.log(userInfo);
+                    //console.log(userInfo.MemberId);
+
+                    // 發送 Fetch API 呼叫，檢查使用者今日是否已經專注超過60分
+                    fetch(`/api/FocusDetails/${userInfo.MemberId}`)
+                        .then(response => response.json())
+                        .then(result => {
+                            // 成功接收到回傳的結果
+                            console.log(result);
+                            if (result) {
+                                Toastify({
+                                    text: "今日已獲取到300點，期待明日與您相見!",
+                                    className: "info",
+                                    duration: 3500,
+                                    style: {
+                                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                        fontSize: "1.5rem",
+                                    },
+                                    close: true,
+                                    gravity: "top", // `top` or `bottom`
+                                    position: "center", // `left`, `center` or `right`
+                                }).showToast();
+                                timeBtn.disabled = "true";
+
+                            } else {
+                                Toastify({
+                                    text: "歡迎使用!",
+                                    className: "info",
+                                    duration: 3500,
+                                    style: {
+                                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                                        fontSize: "1.5rem",
+                                    },
+                                    close: true,
+                                    gravity: "top", // `top` or `bottom`
+                                    position: "center", // `left`, `center` or `right`
+                                }).showToast();
+                            }
+                        })
+                        .catch(error => {
+                            // 發生錯誤時的處理
+                            console.log("Error:", error);
+                            document.getElementById("result").textContent = "發生錯誤";
+                        });
+                })
+                .catch(error => {
+                    console.error('Fetch Error:', error);
+                });
+
+        };
+
+        window.addEventListener("load", createMask);
+        timeBtn.addEventListener("click", deleteMask);
+
+        // CountUp 圓形進度條---------------------------------------------------------------------------------------------
+        var canvas = document.getElementById("progressCanvas");
+        var context = canvas.getContext("2d");
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        var radius = 50;
+        var lineWidth = 10;
+        var totalTime = 0; // 計時總時間
+        var currentTime = 0; // 當前計時時間
+        var progress = 0; // 進度，取值範圍為 0 到 1
+        var intervalId = null; // setInterval 的 ID
+
+        function drawProgressCircle() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            context.lineWidth = lineWidth;
+            context.strokeStyle = "#486375";
+            context.stroke();
+
+            var startAngle = -Math.PI / 2;
+            var endAngle = startAngle + progress * 2 * Math.PI;
+            context.beginPath();
+            context.arc(centerX, centerY, radius, startAngle, endAngle);
+            context.lineWidth = lineWidth;
+            context.strokeStyle = "#759fbd";
+            context.stroke();
+
+            // 繪製動態時間
+            context.fillStyle = "#fff";
+            context.font = "14px Arial";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.fillText(formatTime(currentTime), centerX, centerY);
+
+            // 繪製用戶設定的時間
+            context.font = "18px Arial";
+            context.fillText(
+                formatTime(totalTime).slice(0, 2) + "分",
+                centerX,
+                centerY + 30
+            );
+        }
+
+        function startCountup(minutes) {
+            // 淡入計時器
+            canvas.classList.remove('fade-out-element');
+            canvas.classList.add('fade-in-element');
+
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+
+            totalTime = minutes * 60;
+            currentTime = 0;
+            progress = 0;
+
+            intervalId = setInterval(updateCountup, 1000);
+        }
+
+        function updateCountup() {
+            currentTime++;
+
+            if (currentTime >= totalTime) {
+                // 停止計時器的運作
+                clearInterval(intervalId);
+                // 淡入禮物動畫
+                gift.classList.remove('fade-out-element');
+                gift.classList.add('fade-in-element');
+                // 延遲一段時間後，再將 .fade-in-element 移除，保持原本的搖晃效果
+                setTimeout(() => {
+                    gift.classList.remove("fade-in-element");
+                    gift.style.visibility = "visible";
+                }, 500);
+            }
+            progress = currentTime / totalTime;
+            drawProgressCircle();
+        }
+
+        function formatTime(timeInSeconds) {
+            var minutes = Math.floor(timeInSeconds / 60);
+            var seconds = timeInSeconds % 60;
+
+            var formattedMinutes = ("0" + minutes).slice(-2);
+            var formattedSeconds = ("0" + seconds).slice(-2);
+
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        // 離開或重整頁面時發出提醒---------------------------------------------------------------------------------------------
+        window.addEventListener("beforeunload", function (event) {
+            event.preventDefault();
+            event.returnValue = "點數將無法持續累積，確定要離開專注頁面嗎？"; // 大多瀏覽器已不支援自訂訊息
+        });
+
+        // 註冊禮物圖示點擊事件---------------------------------------------------------------------------------------------
+        gift.addEventListener("click", function () {
+
+            // 紀錄專注結束時間
+            fend = toSqlDateTime();
+
+            // 要寫入FocusDetail資料表的物件
+            const focusDetail = {
+                FocusDetailId: fdid,
+                StartDatetime: fstart,
+                EndDatetime: fend,
+                Duration: focusTime,
+            };
+
+            // 要寫入PointHistory資料表的物件
+            const pointHistory = {
+                PointDetailId: fdid,
+                MemberId: userInfo.MemberId,
+                ModifiedSource: "focus",
+                ModifiedAmount: focusDetail.Duration * 5,
+            };
+
+            // 將上面兩個物件當成屬性裝在一個物件中(對應到 FocusDetailWithPointHistoryDTO)
+            const requestBody = {
+                FocusDetail: focusDetail,
+                PointHistory: pointHistory
+            };
+            console.log(JSON.stringify(requestBody));
+
+            // 將資料寫進 FocusDetail 和 PointHistory 資料表
+            fetch('/api/FocusDetails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.log(response.status, response.statusText, response.url)
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    Toastify({
+                        text: `${data}!`,
+                        className: "info",
+                        duration: 3000,
+                        style: {
+                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                            fontSize: "1.5rem",
+                        },
+                        close: true,
+                        gravity: "top", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                    }).showToast();
+                })
+                .catch(error => {
+                    // Handle any error that occurred during the fetch request
+                    console.error('Fetch Error:', error);
+                });
+
+            // 淡出禮物動畫
+            gift.classList.add('fade-out-element');
+
+            // 淡出計時器
+            canvas.classList.remove('fade-in-element');
+            canvas.classList.add('fade-out-element');
+
+            // 淡入金幣動畫
+            coin.classList.remove('fade-out-element');
+            coin.classList.add('fade-in-element');
+            // 延遲一段時間後，再將.fade-in-element 移除，保持原本的旋轉閃爍效果
+            setTimeout(() => {
+                coin.classList.remove("fade-in-element");
+                coin.style.visibility = "visible";
+            }, 500);
+
+            // 3秒後執行
+            setTimeout(() => {
+                // 淡出金幣動畫
+                coin.classList.add('fade-out-element');
+            }, 3000);
+
+            // 7秒後執行
+            setTimeout(() => {
+                // 關閉情境音效
+                sound[current].pause();
+                // 背景遮罩
+                createMask();
+                // 淡入沙漏圖示
+                hourglassBox.classList.remove('fade-out-element');
+                hourglassBox.classList.add('fade-in-element');
+                // 淡入時間設定方塊
+                timeSetter.classList.remove('fade-out-element');
+                timeSetter.classList.add('fade-in-element');
+            }, 7000)
+
+
+            // 更新使用者 session 及 Member 資料表中的總點數
+            fetch(`/api/SessionData/UpdatePoint/${pointAdd}`, {
+                method: 'POST',
+                credentials: 'same-origin' // 確保携帶相同的cookie信息
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('網路錯誤，無法更新點數');
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    console.log(result); // 在控制台印出更新成功的訊息
+                })
+                .catch(error => {
+                    console.error('發生錯誤：', error); // 如果發生錯誤，印出錯誤訊息
+                });
+        })
+    </script>
+}

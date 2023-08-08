@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EmailTemplate\**" />
+    <Compile Remove="Views\NewFolder1\**" />
+    <Content Remove="EmailTemplate\**" />
+    <Content Remove="Views\NewFolder1\**" />
+    <EmbeddedResource Remove="EmailTemplate\**" />
+    <EmbeddedResource Remove="Views\NewFolder1\**" />
+    <None Remove="EmailTemplate\**" />
+    <None Remove="Views\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Carts\app.cshtml" />
+    <Content Remove="Views\Carts\Create.cshtml" />
+    <Content Remove="Views\Carts\Delete.cshtml" />
+    <Content Remove="Views\Carts\Edit.cshtml" />
+    <Content Remove="Views\Carts\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.61.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.20" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.20">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.15" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OpenAI" Version="1.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\audios\" />
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
+</Project>

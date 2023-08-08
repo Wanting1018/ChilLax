@@ -1,0 +1,218 @@
+﻿@section Styles{
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
+    <style>
+        .containerMcPwd {
+            position: relative;
+            width: 100%;
+            height:350px;
+        }
+
+        .row {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 20%);
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .contentMcPwd h3 {
+            text-align: center;
+            /* font-size: 28px; */
+            left: 50%;
+            transform: translate(-55%, 0);
+            position: relative;
+        }
+
+        .contentMcPwd .input-box {
+            margin: 10px 0;
+        }
+
+            .contentMcPwd .input-box input {
+                border: none;
+                border-bottom: 1px dotted black;
+                padding: 5px 0 5px 5px;
+                height: 20px;
+                font-size: 16px;
+            }
+
+                .contentMcPwd .input-box input:focus {
+                    border-color: #438989;
+                    outline: none;
+                    /* box-shadow: 0 0 5px #5cadad; */
+                }
+
+        .resendBtn {
+            width: 150px;
+            height: 35px;
+            margin-top: 20px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            position: relative;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #4f9d9d;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: rgba(0, 0, 0, 0.4);
+            font-weight: bolder;
+        }
+
+        .resendBtn:hover {
+            background-color: #fcfcfc;
+            border: 1px solid #4f9d9d;
+            border-radius: 2px;
+            color: #4f9d9d;
+        }
+
+        .pwdVisibility {
+            color: rgb(0, 0, 0);
+            font-size: 16px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+}
+<title>編輯密碼</title>
+
+<div class="containerMcPwd">
+        <div class="row">
+            <div class="contentMcPwd">
+                <form id="ResetPwd">
+                    <h3>編輯密碼</h3>
+                    <div class="input-box">
+                        <i class="bi bi-key"></i>
+                        <input type="password"
+                               id="memberPwd"
+                               name="memberPassword"
+                               autocomplete="off"
+                               placeholder="舊密碼"
+                               required />
+                        <button type="button"
+                                class="pwdVisibility"
+                                id="togglePwd"
+                                onclick="togglePasswordVisibility('memberPwd', 'togglePwd')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <div class="input-box">
+                        <i class="bi bi-key"></i>
+                        <input type="password"
+                                id="memberNewPwd"
+                               name="memberConfirmPassword"
+                               autocomplete="off"
+                               placeholder="新密碼(至少8個字元)"
+                               required />
+                        <button type="button"
+                                class="pwdVisibility"
+                                id="toggleChkPwd"
+                                onclick="togglePasswordVisibility('memberNewPwd', 'toggleChkPwd')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <div class="input-box">
+                        <i class="bi bi-key"></i>
+                        <input type="password"
+                               id="memberChkPwd"
+                               name="memberConfirmPassword"
+                               autocomplete="off"
+                               placeholder="確認新密碼"
+                               required />
+                        <button type="button"
+                                class="pwdVisibility"
+                                id="toggleChkPwd"
+                                onclick="togglePasswordVisibility('memberChkPwd', 'toggleChkPwd')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <button class="resendBtn" type="submit">送出</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+@section Scripts{
+<script>
+        function togglePasswordVisibility(inputId, toggleButtonId) {
+            console.log("togglePasswordVisibility");
+
+            var passwordInput = document.getElementById(inputId);
+            var toggleButton = document.getElementById(toggleButtonId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        }
+
+
+
+
+        document.getElementById("ResetPwd").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let memberPassword = document.getElementById("memberPwd").value;
+            let memberNewPassword = document.getElementById("memberNewPwd").value;
+            let memberConfirmPassword = document.getElementById("memberChkPwd").value;
+
+
+
+            if ((memberPassword.trim() === "") || (memberNewPassword.trim() === "") || (memberConfirmPassword.trim() === "")) {
+                alert("請輸入所有欄位!");
+                return false;
+            }
+            let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+            if (!passwordPattern.test(memberNewPassword)) {
+                alert("密碼必須包含至少一個數字、一個小寫字母和一個大寫字母，且長度在8到20之間");
+                return false;
+            }
+
+            if (memberConfirmPassword !== memberNewPassword) {
+                alert("請確認密碼是否相同!")
+                return false;
+            }
+
+
+            const formData =
+            {
+                memberPassword: memberPassword,
+                memberNewPassword: memberNewPassword
+            }
+
+            console.log(JSON.stringify(formData));
+
+            $.ajax({
+                type: "POST",
+                url: "/api/Members/editPwd",
+                data: JSON.stringify(formData),
+                contentType: "application/json"
+            }).done(data => {
+                if (!data.success) {
+                    alert(data.message);
+                    return false;
+                } else if (data.login == false) {
+                    alert(data.message);
+                    window.location.href = "https://localhost:5000/Login/Login";
+                }
+                alert(data.message);
+                window.location.href = "https://localhost:5000/Home/Index";
+
+            }).fail((jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status === 400) {
+                    const errorResponse = jqXHR.responseJSON;
+                    alert(errorResponse.message);
+                } else {
+                    console.error("AJAX error:", textStatus, errorThrown);
+                }
+            });
+            return false;
+        });
+</script>
+}
